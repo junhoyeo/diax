@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -130,10 +131,14 @@ const LandingPage = () => {
       <List>
         {assets.map((asset) => (
           <ListItem key={asset.uri}>
-            <ListItemImage src={asset.image_url} />
-            <pre>
-              <code>{JSON.stringify(asset, null, 2)}</code>
-            </pre>
+            <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
+              <a>
+                <ListItemImage src={asset.image_url} />
+                <pre>
+                  <code>{JSON.stringify(asset, null, 2)}</code>
+                </pre>
+              </a>
+            </Link>
           </ListItem>
         ))}
       </List>
@@ -185,7 +190,11 @@ const List = styled.ul`
 `;
 const ListItem = styled.li`
   width: 100%;
-  display: flex;
+
+  & > a {
+    display: flex;
+    color: unset;
+  }
 
   & > pre {
     margin: 0;
