@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
-import React, { useCallback, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Tab } from '@/components/Tab';
@@ -10,12 +11,23 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { ETHTokenType } from '@imtbl/imx-sdk';
 
 const LandingPage = () => {
+  const router = useRouter();
   const [environment, setEnvironment] = useLocalStorage<Environment>(
     '@environment',
     'mainnet',
   );
   const { client, link } = useImmutableX(environment);
+
   const [address, setAddress] = useLocalStorage<string>('@wallet_address', '');
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+    if (router.query.address) {
+      setAddress(router.query.address as string);
+    }
+  }, [router, setAddress]);
+
   const [starkPublicKey, setStarkPublicKey] = useLocalStorage<string>(
     '@stark_public_key',
     '',
