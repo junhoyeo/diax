@@ -130,7 +130,7 @@ const LandingPage = () => {
       </div>
       <List>
         {assets.map((asset) => (
-          <ListItem key={asset.uri}>
+          <ListItem key={`${asset.token_address}-${asset.token_id}`}>
             <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
               <a>
                 <ListItemImage src={asset.image_url} />
