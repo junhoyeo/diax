@@ -29,7 +29,7 @@ const DetailPage = () => {
       if (['name', 'image_url'].includes(key)) {
         return;
       }
-      values.push({ name: key, value });
+      values.push({ name: key, value: JSON.stringify(value) });
     });
     return values;
   }, [asset]);
