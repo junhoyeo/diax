@@ -12,6 +12,8 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { shortenAddress } from '@/utils/shortenAddress';
 import { ETHTokenType } from '@imtbl/imx-sdk';
 
+const DEFAULT_IMAGE = '/images/empty-asset.png';
+
 const provider = new ethers.providers.JsonRpcProvider(
   'https://eth-mainnet.alchemyapi.io/v2/S1LUkRnEm4yXq8ofnYa9yrLgr1PoglsV',
 );
@@ -131,7 +133,7 @@ const LandingPage = () => {
             <ListItem key={`${asset.token_address}-${asset.token_id}`}>
               <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
                 <a>
-                  <ListItemImage src={asset.image_url} />
+                  <ListItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
                 </a>
               </Link>
             </ListItem>

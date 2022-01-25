@@ -6,6 +6,8 @@ import { Environment, useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssetDetail } from '@/hooks/useImmutableXAssetDetail';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
+const DEFAULT_IMAGE = '/images/empty-asset.png';
+
 const DetailPage = () => {
   const router = useRouter();
   const [environment, setEnvironment] = useLocalStorage<Environment>(
@@ -41,16 +43,20 @@ const DetailPage = () => {
   return (
     <Wrapper>
       <Container>
-        <AssetImage src={asset.image_url} />
+        <AssetImage src={asset.image_url ?? DEFAULT_IMAGE} />
         <AssetDetailContainer>
           <CollectionRow>
             <CollectionIcon
               alt={asset.collection.name}
-              src={asset.collection.icon_url}
+              src={
+                asset.collection.icon_url.startsWith('http')
+                  ? asset.collection.icon_url
+                  : DEFAULT_IMAGE
+              }
             />
             <CollectionName>{asset.collection.name}</CollectionName>
           </CollectionRow>
-          <AssetName>{asset.name}</AssetName>
+          <AssetName>{asset.name ?? 'NAME_IS_EMPTY'}</AssetName>
           <LinkList>
             <li>
               <a
