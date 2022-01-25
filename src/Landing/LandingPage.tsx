@@ -80,11 +80,7 @@ const LandingPage = () => {
     <Container>
       {!address ? (
         <PrimaryButton onClick={onClickSetupIMX}>Setup IMX</PrimaryButton>
-      ) : (
-        <SecondaryButton onClick={onClickDisconnectIMX}>
-          Disconnect
-        </SecondaryButton>
-      )}
+      ) : null}
       <br />
       <Tab
         selected={environment}
@@ -106,7 +102,8 @@ const LandingPage = () => {
       {balances.map((balance, index) => (
         <ul key={index}>
           <li>
-            IMX: {balance ? ethers.utils.formatEther(balance.balance) : '-'}
+            {balance.symbol.toUpperCase()}:{' '}
+            {balance ? ethers.utils.formatEther(balance.balance) : '-'}
           </li>
           <li>
             Preparing withdrawal:{' '}
@@ -120,14 +117,6 @@ const LandingPage = () => {
           </li>
         </ul>
       ))}
-      <Input
-        type="number"
-        value={amount}
-        onChange={(event) => setAmount(event.target.value)}
-      />
-      <div style={{ marginTop: 16 }}>
-        <PrimaryButton onClick={onClickDeposit}>Deposit</PrimaryButton>
-      </div>
       <List>
         {assets.map((asset) => (
           <ListItem key={`${asset.token_address}-${asset.token_id}`}>
@@ -209,14 +198,4 @@ const ListItemImage = styled.img`
   width: 256px;
   height: 256px;
   border-radius: 10px;
-`;
-
-const Input = styled.input`
-  border: 3px solid #24d1e9;
-  border-radius: 10px;
-  background-color: transparent;
-  color: #24d1e9;
-  padding: 12px 24px;
-  font-size: 1.65rem;
-  line-height: 120%;
 `;
