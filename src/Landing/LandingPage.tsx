@@ -124,9 +124,6 @@ const LandingPage = () => {
             <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
               <a>
                 <ListItemImage src={asset.image_url} />
-                <pre>
-                  <code>{JSON.stringify(asset, null, 2)}</code>
-                </pre>
               </a>
             </Link>
           </ListItem>
@@ -173,10 +170,12 @@ const SecondaryButton = styled(PrimaryButton)`
 const List = styled.ul`
   width: 100%;
   margin: 0;
-  padding: 0 24px;
-
-  display: flex;
+  padding: 0;
   list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(5, 256px);
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
 `;
 const ListItem = styled.li`
   width: 100%;
@@ -199,4 +198,5 @@ const ListItemImage = styled.img`
   width: 256px;
   height: 256px;
   border-radius: 10px;
+  background-color: #191e2b;
 `;

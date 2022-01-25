@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { Environment, useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssetDetail } from '@/hooks/useImmutableXAssetDetail';
@@ -26,7 +26,7 @@ const DetailPage = () => {
     }
     let values: { name: string; value: string }[] = [];
     Object.entries(asset.metadata).forEach(([key, value]) => {
-      if (['name', 'image_url'].includes(key)) {
+      if (['name', 'image_url', 'description', 'attributes'].includes(key)) {
         return;
       }
       values.push({ name: key, value: JSON.stringify(value) });
@@ -39,91 +39,176 @@ const DetailPage = () => {
   }
 
   return (
-    <Container>
-      <h2>Asset</h2>
-      <ListItem key={asset.uri}>
-        <ListItemImage src={asset.image_url} />
-        <pre>
-          <code>{JSON.stringify(asset, null, 2)}</code>
-        </pre>
-      </ListItem>
-      <CollectionIcon
-        alt={asset.collection.name}
-        src={asset.collection.icon_url}
-      />
-      <h3>{asset.collection.name}</h3>
-      <h1>{asset.name}</h1>
-      {attributes.map((attribute) => (
-        <div key={attribute.name}>
-          <span>{attribute.name}</span> - <span>{attribute.value}</span>
-        </div>
-      ))}
-      <h2>Links</h2>
-      <ul>
-        <li>
-          <a
-            href={`https://immutascan.io/address/${asset.token_address}`}
-            target="_blank"
-            rel="noreferrer"
-            style={{ color: 'unset' }}
-          >
-            ImmutaScan
-          </a>
-        </li>
-        <li>
-          <a
-            href={`https://market.x.immutable.com/assets?collection=${asset.token_address}&sort[order_by]=buy_quantity&sort[direction]=asc`}
-            target="_blank"
-            rel="noreferrer"
-            style={{ color: 'unset' }}
-          >
-            Immutable Market
-          </a>
-        </li>
-      </ul>
-      <h2>Mints</h2>
-      <pre>
-        <code>{JSON.stringify(mints, null, 2)}</code>
-      </pre>
-      <h2>Transfers</h2>
-      <pre>
-        <code>{JSON.stringify(transfers, null, 2)}</code>
-      </pre>
-    </Container>
+    <Wrapper>
+      <Container>
+        <AssetImage src={asset.image_url} />
+        <AssetDetailContainer>
+          <CollectionRow>
+            <CollectionIcon
+              alt={asset.collection.name}
+              src={asset.collection.icon_url}
+            />
+            <CollectionName>{asset.collection.name}</CollectionName>
+          </CollectionRow>
+          <AssetName>{asset.name}</AssetName>
+          <LinkList>
+            <li>
+              <a
+                href={`https://immutascan.io/address/${asset.token_address}`}
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: 'unset' }}
+              >
+                <LinkLogoBadge>
+                  <LinkLogo src="/logos/immutascan.png" alt="ImmutaScan" />
+                  <span>ImmutaScan</span>
+                </LinkLogoBadge>
+              </a>
+            </li>
+            <li>
+              <a
+                href={`https://market.x.immutable.com/assets?collection=${asset.token_address}&sort[order_by]=buy_quantity&sort[direction]=asc`}
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: 'unset' }}
+              >
+                <LinkLogoBadge>
+                  <LinkLogo src="/logos/imx.svg" alt="Immutable Market" />
+                  <span>Immutable Market</span>
+                </LinkLogoBadge>
+              </a>
+            </li>
+          </LinkList>
+          <p>{asset.description}</p>
+          {attributes.map((attribute) => (
+            <div key={attribute.name}>
+              <span>{attribute.name}</span> - <span>{attribute.value}</span>
+            </div>
+          ))}
+          <h2>Mints</h2>
+          <pre>
+            <code>{JSON.stringify(mints, null, 2)}</code>
+          </pre>
+          <h2>Transfers</h2>
+          <pre>
+            <code>{JSON.stringify(transfers, null, 2)}</code>
+          </pre>
+        </AssetDetailContainer>
+      </Container>
+    </Wrapper>
   );
 };
 
 export default DetailPage;
 
-const Container = styled.div`
-  padding: 32px 0;
+const Wrapper = styled.div`
+  padding: 80px 20px;
+
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+`;
+const Container = styled.div`
+  max-width: 1240px;
+  display: flex;
   color: white;
 `;
 
-const ListItem = styled.li`
-  width: 100%;
+const AssetImage = styled.img`
+  width: 512px;
+  height: 512px;
+  border-radius: 10px;
+  background-color: #191e2b;
+  border: 4px solid #24d2e9;
+`;
+const AssetDetailContainer = styled.div`
+  margin-left: 32px;
+  padding: 24px 0;
   display: flex;
+  flex-direction: column;
+`;
 
-  & > pre {
-    margin: 0;
-    margin-left: 16px;
-    flex: 1;
-    display: flex;
-    word-break: keep-all;
-    font-size: 0.8rem;
+const CollectionRow = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const CollectionIcon = styled.img`
+  margin-right: 8px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #191e2b;
+  box-shadow: 0px 4px 16px rgba(0, 102, 255, 0.24);
+`;
+const CollectionName = styled.h3`
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 120%;
+`;
+
+const backgroundWarpKeyframes = keyframes`
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 `;
-const ListItemImage = styled.img`
-  width: 256px;
-  height: 256px;
-  border-radius: 10px;
+const AssetName = styled.h1`
+  margin: 0;
+  margin-top: 16px;
+  font-size: 3.1rem;
+  width: fit-content;
+  background: linear-gradient(
+    to right,
+    #48eaff,
+    #75acff,
+    #62efff,
+    #36c4d6,
+    #75acff,
+    #23e5ff,
+    #32aff2,
+    #5b95ff,
+    #32e5f2,
+    #3bd1ff,
+    #48eaff
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  background-size: 200%;
+  animation: ${backgroundWarpKeyframes} 4s ease infinite;
 `;
 
-const CollectionIcon = styled.img`
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+const LinkList = styled.ul`
+  margin: 0;
+  margin-top: 16px;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+`;
+const LinkLogoBadge = styled.div`
+  margin-right: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  background-color: #202635;
+  border-radius: 36px;
+
+  will-change: transform;
+  transition: all 0.125s ease 0s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  & > span {
+    margin-left: 8px;
+    font-size: 1.02rem;
+    line-height: 80%;
+  }
+`;
+const LinkLogo = styled.img`
+  width: 24px;
+  height: 24px;
 `;

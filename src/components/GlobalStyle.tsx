@@ -23,6 +23,12 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
+  img {
+    user-select: none;
+    user-drag: none;
+    -webkit-user-drag: none;
+  }
+
   input {
     outline: 0;
   }
