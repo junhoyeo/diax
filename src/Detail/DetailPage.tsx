@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 
 import { Environment, useImmutableX } from '@/hooks/useImmutableX';
@@ -20,6 +20,20 @@ const DetailPage = () => {
     tokenId: router.query.token_id as string,
   });
 
+  const attributes = useMemo(() => {
+    if (!asset) {
+      return;
+    }
+    let values: { name: string; value: string }[] = [];
+    Object.entries(asset.metadata).forEach(([key, value]) => {
+      if (['name', 'image_url'].includes(key)) {
+        return;
+      }
+      values.push({ name: key, value });
+    });
+    return values;
+  }, [asset]);
+
   if (!asset) {
     return null;
   }
@@ -33,6 +47,17 @@ const DetailPage = () => {
           <code>{JSON.stringify(asset, null, 2)}</code>
         </pre>
       </ListItem>
+      <CollectionIcon
+        alt={asset.collection.name}
+        src={asset.collection.icon_url}
+      />
+      <h3>{asset.collection.name}</h3>
+      <h1>{asset.name}</h1>
+      {attributes.map((attribute) => (
+        <div key={attribute.name}>
+          <span>{attribute.name}</span> - <span>{attribute.value}</span>
+        </div>
+      ))}
       <h2>Links</h2>
       <ul>
         <li>
@@ -95,4 +120,10 @@ const ListItemImage = styled.img`
   width: 256px;
   height: 256px;
   border-radius: 10px;
+`;
+
+const CollectionIcon = styled.img`
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
 `;
