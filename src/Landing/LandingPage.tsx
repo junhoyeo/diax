@@ -78,65 +78,73 @@ const LandingPage = () => {
   }, [link, amount]);
 
   return (
-    <Container>
-      {!address ? (
-        <PrimaryButton onClick={onClickSetupIMX}>Setup IMX</PrimaryButton>
-      ) : null}
-      <br />
-      <Tab
-        selected={environment}
-        onChange={(value) => {
-          setEnvironment(value);
-          setAddress('');
-          setBalances([]);
-        }}
-        tabs={[
-          { type: 'mainnet', title: 'Mainnet' },
-          { type: 'ropsten', title: 'Ropsten (Testnet)' },
-        ]}
-      />
-      <br />
-      <h1>{shortenAddress(address)}</h1>
-      <br />
-      <span>STARK PUBLIC KEY: {starkPublicKey}</span>
-      <br />
-      {balances.map((balance, index) => (
-        <ul key={index}>
-          <li>
-            {balance.symbol.toUpperCase()}:{' '}
-            {balance ? ethers.utils.formatEther(balance.balance) : '-'}
-          </li>
-          <li>
-            Preparing withdrawal:{' '}
-            {balance
-              ? ethers.utils.formatEther(balance.preparingWithdrawal)
-              : '-'}
-          </li>
-          <li>
-            Withdrawal:{' '}
-            {balance ? ethers.utils.formatEther(balance.withdrawable) : '-'}
-          </li>
-        </ul>
-      ))}
-      <List>
-        {assets.map((asset) => (
-          <ListItem key={`${asset.token_address}-${asset.token_id}`}>
-            <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
-              <a>
-                <ListItemImage src={asset.image_url} />
-              </a>
-            </Link>
-          </ListItem>
+    <Wrapper>
+      <Container>
+        {!address ? (
+          <PrimaryButton onClick={onClickSetupIMX}>Setup IMX</PrimaryButton>
+        ) : null}
+        <br />
+        <Tab
+          selected={environment}
+          onChange={(value) => {
+            setEnvironment(value);
+            setAddress('');
+            setBalances([]);
+          }}
+          tabs={[
+            { type: 'mainnet', title: 'Mainnet' },
+            { type: 'ropsten', title: 'Ropsten (Testnet)' },
+          ]}
+        />
+        <br />
+        <h1>{shortenAddress(address)}</h1>
+        <br />
+        <span>STARK PUBLIC KEY: {starkPublicKey}</span>
+        <br />
+        {balances.map((balance, index) => (
+          <ul key={index}>
+            <li>
+              {balance.symbol.toUpperCase()}:{' '}
+              {balance ? ethers.utils.formatEther(balance.balance) : '-'}
+            </li>
+            <li>
+              Preparing withdrawal:{' '}
+              {balance
+                ? ethers.utils.formatEther(balance.preparingWithdrawal)
+                : '-'}
+            </li>
+            <li>
+              Withdrawal:{' '}
+              {balance ? ethers.utils.formatEther(balance.withdrawable) : '-'}
+            </li>
+          </ul>
         ))}
-      </List>
-    </Container>
+        <List>
+          {assets.map((asset) => (
+            <ListItem key={`${asset.token_address}-${asset.token_id}`}>
+              <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
+                <a>
+                  <ListItemImage src={asset.image_url} />
+                </a>
+              </Link>
+            </ListItem>
+          ))}
+        </List>
+      </Container>
+    </Wrapper>
   );
 };
 
 export default LandingPage;
 
+const Wrapper = styled.div`
+  padding: 80px 20px;
+  display: flex;
+  justify-content: center;
+`;
+
 const Container = styled.div`
-  padding: 32px 0;
+  max-width: 1240px;
   display: flex;
   flex-direction: column;
   align-items: center;
