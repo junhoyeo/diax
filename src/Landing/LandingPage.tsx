@@ -9,6 +9,7 @@ import { Environment, useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssets } from '@/hooks/useImmutableXAssets';
 import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { shortenAddress } from '@/utils/shortenAddress';
 import { ETHTokenType } from '@imtbl/imx-sdk';
 
 const LandingPage = () => {
@@ -95,7 +96,7 @@ const LandingPage = () => {
         ]}
       />
       <br />
-      <span>ADDRESS: {address}</span>
+      <h1>{shortenAddress(address)}</h1>
       <br />
       <span>STARK PUBLIC KEY: {starkPublicKey}</span>
       <br />
