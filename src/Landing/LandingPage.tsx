@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { Tab } from '@/components/Tab';
 import { Environment, useImmutableX } from '@/hooks/useImmutableX';
@@ -11,6 +11,10 @@ import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { shortenAddress } from '@/utils/shortenAddress';
 import { ETHTokenType } from '@imtbl/imx-sdk';
+
+const provider = new ethers.providers.JsonRpcProvider(
+  'https://eth-mainnet.alchemyapi.io/v2/S1LUkRnEm4yXq8ofnYa9yrLgr1PoglsV',
+);
 
 const LandingPage = () => {
   const router = useRouter();
@@ -21,14 +25,20 @@ const LandingPage = () => {
   const { client, link } = useImmutableX(environment);
 
   const [address, setAddress] = useLocalStorage<string>('@wallet_address', '');
+  const [ensDomain, setEnsDomain] = useLocalStorage<string>('@ens', '');
   useEffect(() => {
     if (!router.isReady) {
       return;
     }
+    let address = '';
     if (router.query.address) {
-      setAddress(router.query.address as string);
+      address = router.query.address as string;
+      setAddress(address);
     }
-  }, [router, setAddress]);
+    if (address) {
+      provider.lookupAddress(address).then(setEnsDomain);
+    }
+  }, [router, setAddress, setEnsDomain]);
 
   const [starkPublicKey, setStarkPublicKey] = useLocalStorage<string>(
     '@stark_public_key',
@@ -83,7 +93,6 @@ const LandingPage = () => {
         {!address ? (
           <PrimaryButton onClick={onClickSetupIMX}>Setup IMX</PrimaryButton>
         ) : null}
-        <br />
         <Tab
           selected={environment}
           onChange={(value) => {
@@ -96,11 +105,9 @@ const LandingPage = () => {
             { type: 'ropsten', title: 'Ropsten (Testnet)' },
           ]}
         />
-        <br />
-        <h1>{shortenAddress(address)}</h1>
-        <br />
+        <EnsDomain>{ensDomain}</EnsDomain>
+        <EthereumAddress>{shortenAddress(address)}</EthereumAddress>
         <span>STARK PUBLIC KEY: {starkPublicKey}</span>
-        <br />
         {balances.map((balance, index) => (
           <ul key={index}>
             <li>
@@ -145,10 +152,48 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   max-width: 1240px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: white;
+`;
+
+const backgroundWarpKeyframes = keyframes`
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+`;
+const EnsDomain = styled.h1`
+  margin: 0;
+  font-size: 3.1rem;
+  width: fit-content;
+  background: linear-gradient(
+    to right,
+    #48eaff,
+    #75acff,
+    #62efff,
+    #36c4d6,
+    #75acff,
+    #23e5ff,
+    #32aff2,
+    #5b95ff,
+    #32e5f2,
+    #3bd1ff,
+    #48eaff
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  background-size: 200%;
+  animation: ${backgroundWarpKeyframes} 4s ease infinite;
+`;
+const EthereumAddress = styled.h2`
+  margin: 0;
 `;
 
 const PrimaryButton = styled.button`
