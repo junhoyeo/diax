@@ -5,6 +5,7 @@ import styled, { keyframes } from 'styled-components';
 
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssetDetail } from '@/hooks/useImmutableXAssetDetail';
+import { useImmutableXBridging } from '@/hooks/useImmutableXBridging';
 import { NetworkAtom } from '@/state/Network';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';
@@ -12,7 +13,14 @@ const DEFAULT_IMAGE = '/images/empty-asset.png';
 const DetailPage = () => {
   const router = useRouter();
   const network = useRecoilValue(NetworkAtom);
-  const { client } = useImmutableX(network);
+  const { client, link } = useImmutableX(network);
+
+  const { deposit, prepareWithdrawal, completeWithdrawal } =
+    useImmutableXBridging({
+      client,
+      link,
+      address: '0x4a003f0a2c52e37138eb646aB4E669C4A84C1001',
+    });
 
   const { asset, mints, transfers } = useImmutableXAssetDetail({
     network,
@@ -56,6 +64,7 @@ const DetailPage = () => {
             <CollectionName>{asset.collection.name}</CollectionName>
           </CollectionRow>
           <AssetName>{asset.name ?? 'NAME_IS_EMPTY'}</AssetName>
+          <h1>{asset.status}</h1>
           <LinkList>
             <li>
               <a
@@ -84,6 +93,17 @@ const DetailPage = () => {
               </a>
             </li>
           </LinkList>
+          <button
+            style={{ background: 'white', color: 'black', padding: 20 }}
+            onClick={() =>
+              prepareWithdrawal({
+                tokenId: asset.token_id,
+                tokenAddress: asset.token_address,
+              }).catch(console.log)
+            }
+          >
+            Withdraw
+          </button>
           <p>{asset.description}</p>
           {attributes.map((attribute) => (
             <div key={attribute.name}>
