@@ -1,2 +1,3 @@
-# immutable-inventory
-🌈 Inventory for Immutable X
+# DiaX
+
+💎 Wallet for Immutable X
