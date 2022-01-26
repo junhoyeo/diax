@@ -30,20 +30,6 @@ const LandingPage = () => {
     }
   }, [link]);
 
-  useEffect(() => {
-    if (!link) {
-      return;
-    }
-    link
-      .deposit({
-        type: ERC721TokenType.ERC721,
-        tokenAddress: '0xa15b310f70f0eae2fab0bd1c50c88eace94bbbd6',
-        tokenId: '1',
-      })
-      .then(console.log)
-      .catch(console.error);
-  }, [link]);
-
   return (
     <Wrapper>
       <Container>

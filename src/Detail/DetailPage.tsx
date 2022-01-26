@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
@@ -46,6 +46,20 @@ const DetailPage = () => {
   if (!asset) {
     return null;
   }
+
+  // useEffect(() => {
+  //   if (!link) {
+  //     return;
+  //   }
+  //   link
+  //     .deposit({
+  //       type: ERC721TokenType.ERC721,
+  //       tokenAddress: '0xa15b310f70f0eae2fab0bd1c50c88eace94bbbd6',
+  //       tokenId: '1',
+  //     })
+  //     .then(console.log)
+  //     .catch(console.error);
+  // }, [link]);
 
   return (
     <Wrapper>

@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
@@ -10,6 +10,7 @@ import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssets } from '@/hooks/useImmutableXAssets';
 import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useOpenSeaAssets } from '@/hooks/useOpenSeaAssets';
 import { NetworkAtom } from '@/state/Network';
 import { shortenAddress } from '@/utils/shortenAddress';
 import { ETHTokenType } from '@imtbl/imx-sdk';
@@ -71,23 +72,14 @@ const LandingPage = () => {
     setStarkPublicKey('');
   }, [setAddress, setStarkPublicKey]);
 
-  const { assets } = useImmutableXAssets({ client, address });
-
-  const [amount, setAmount] = useState<string>('0');
-
-  const onClickDeposit = useCallback(async () => {
-    if (!link) {
-      return;
+  const { assets: immutableXAssets } = useImmutableXAssets({ client, address });
+  const { assets: openSeaAssets } = useOpenSeaAssets({ address });
+  const assets = useMemo(() => {
+    if (network === 'mainnet') {
+      return [...immutableXAssets, ...openSeaAssets];
     }
-    const isValidAmount = parseFloat(amount) > 0;
-    if (!isValidAmount) {
-      return;
-    }
-    link.deposit({
-      type: ETHTokenType.ETH,
-      amount,
-    });
-  }, [link, amount]);
+    return immutableXAssets;
+  }, [network, immutableXAssets, openSeaAssets]);
 
   return (
     <Wrapper>
