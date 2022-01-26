@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-const DynamicPage = dynamic(() => import('@/Landing/LandingPage'), {
+const DynamicPage = dynamic(() => import('@/Address/AddressPage'), {
   ssr: false,
 });
 
