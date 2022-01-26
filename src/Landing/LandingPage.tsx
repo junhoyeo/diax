@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useImmutableX } from '@/hooks/useImmutableX';
-import { ETHTokenType } from '@imtbl/imx-sdk';
+import { ERC20TokenType, ERC721TokenType, ETHTokenType } from '@imtbl/imx-sdk';
 
 const AVATAR_URL =
   'https://lh3.googleusercontent.com/1fQX9jABcIpiU7zjkuIv0H6XmkRZiIlFIQK_7YEzsx8L5Xw2yb0dWXUrtXfQvDuhPG1YRt2BywbstBugUUL7cZgYHg-Xb0XAcVai=w600';
@@ -12,7 +12,7 @@ const LandingPage = () => {
   const router = useRouter();
   const [address, setAddress] = useState<string>('');
 
-  const { client, link } = useImmutableX('mainnet');
+  const { client, link } = useImmutableX('ropsten');
   const onClickDonate = useCallback(async () => {
     try {
       await link.setup({});
@@ -28,6 +28,20 @@ const LandingPage = () => {
     } catch (err) {
       console.log(err);
     }
+  }, [link]);
+
+  useEffect(() => {
+    if (!link) {
+      return;
+    }
+    link
+      .deposit({
+        type: ERC721TokenType.ERC721,
+        tokenAddress: '0xa15b310f70f0eae2fab0bd1c50c88eace94bbbd6',
+        tokenId: '1',
+      })
+      .then(console.log)
+      .catch(console.error);
   }, [link]);
 
   return (
