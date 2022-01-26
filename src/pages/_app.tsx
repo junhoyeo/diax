@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
+import { RecoilRoot } from 'recoil';
 
 import { GlobalStyle } from '@/components/GlobalStyle';
 
@@ -19,7 +20,9 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
       <GlobalStyle />
-      <Component {...pageProps} />
+      <RecoilRoot>
+        <Component {...pageProps} />
+      </RecoilRoot>
     </React.Fragment>
   );
 }

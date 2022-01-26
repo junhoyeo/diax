@@ -1,9 +1,13 @@
 import axios from 'axios';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { Network } from '@/state/Network';
 import { ImmutableMethodResults, ImmutableXClient } from '@imtbl/imx-sdk';
 
+import { ENDPOINTS } from './useImmutableX';
+
 type UseAssetsParams = {
+  network: Network;
   client: ImmutableXClient | null;
   tokenId: string;
   tokenAddress: string;
@@ -12,6 +16,7 @@ type UseAssetsParams = {
 export type ImmutableXAsset = ImmutableMethodResults.ImmutableAsset;
 
 export const useImmutableXAssetDetail = ({
+  network,
   client,
   tokenId,
   tokenAddress,
@@ -28,17 +33,21 @@ export const useImmutableXAssetDetail = ({
   const isFetchedMintsRef = useRef<boolean>(false);
   const isFetchedTransfersRef = useRef<boolean>(false);
 
+  const API_ENDPOINT = useMemo(() => {
+    return ENDPOINTS[network].PUBLIC_API;
+  }, [network]);
+
   useEffect(() => {
     if (!client || !tokenId || !tokenAddress || isFetchedRef.current) {
       return;
     }
     axios
-      .get(`https://api.x.immutable.com/v1/assets/${tokenAddress}/${tokenId}`)
+      .get(`${API_ENDPOINT}/assets/${tokenAddress}/${tokenId}`)
       .then(({ data }) => {
         isFetchedRef.current = true;
         setAsset(data);
       });
-  }, [client, tokenId, tokenAddress]);
+  }, [client, tokenId, tokenAddress, API_ENDPOINT]);
 
   useEffect(() => {
     if (!client || !tokenId || !tokenAddress || isFetchedMintsRef.current) {
@@ -46,13 +55,13 @@ export const useImmutableXAssetDetail = ({
     }
     axios
       .get(
-        `https://api.x.immutable.com/v1/mints?token_address=${tokenAddress}&token_id=${tokenId}`,
+        `${API_ENDPOINT}/mints?token_address=${tokenAddress}&token_id=${tokenId}`,
       )
       .then(({ data }) => {
         isFetchedMintsRef.current = true;
         setMints(data.result);
       });
-  }, [client, tokenId, tokenAddress]);
+  }, [client, tokenId, tokenAddress, API_ENDPOINT]);
 
   useEffect(() => {
     if (!client || !tokenId || !tokenAddress || isFetchedTransfersRef.current) {
@@ -60,13 +69,13 @@ export const useImmutableXAssetDetail = ({
     }
     axios
       .get(
-        `https://api.x.immutable.com/v1/transfers?token_address=${tokenAddress}&token_id=${tokenId}`,
+        `${API_ENDPOINT}/transfers?token_address=${tokenAddress}&token_id=${tokenId}`,
       )
       .then(({ data }) => {
         isFetchedTransfersRef.current = true;
         setTransfers(data.result);
       });
-  }, [client, tokenId, tokenAddress]);
+  }, [client, tokenId, tokenAddress, API_ENDPOINT]);
 
   return { asset, mints, transfers };
 };

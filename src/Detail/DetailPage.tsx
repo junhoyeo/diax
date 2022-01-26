@@ -1,22 +1,21 @@
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
-import { Environment, useImmutableX } from '@/hooks/useImmutableX';
+import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssetDetail } from '@/hooks/useImmutableXAssetDetail';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { NetworkAtom } from '@/state/Network';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';
 
 const DetailPage = () => {
   const router = useRouter();
-  const [environment, setEnvironment] = useLocalStorage<Environment>(
-    '@environment',
-    'mainnet',
-  );
-  const { client } = useImmutableX(environment);
+  const network = useRecoilValue(NetworkAtom);
+  const { client } = useImmutableX(network);
 
   const { asset, mints, transfers } = useImmutableXAssetDetail({
+    network,
     client,
     tokenAddress: router.query.token_address as string,
     tokenId: router.query.token_id as string,
@@ -121,6 +120,7 @@ const Container = styled.div`
 
 const AssetImage = styled.img`
   width: 512px;
+  min-width: 512px;
   height: 512px;
   border-radius: 10px;
   background-color: #191e2b;
@@ -130,6 +130,7 @@ const AssetDetailContainer = styled.div`
   margin-left: 32px;
   padding: 24px 0;
   display: flex;
+  flex: 1;
   flex-direction: column;
 `;
 

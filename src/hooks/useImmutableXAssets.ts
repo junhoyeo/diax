@@ -20,24 +20,24 @@ export const useImmutableXAssets = ({ client, address }: UseAssetsParams) => {
   const [nextCursor, setNextCursor] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (!client || !address || isFetchedRef.current) {
+    if (!client || !address) {
       return;
     }
     client
       .getAssets({
         user: address,
-        cursor: currentCursor,
+        cursor: '',
       })
       .then((data) => {
-        isFetchedRef.current = true;
-        setAssets((prev) => [...prev, ...data.result]);
+        setAssets(data.result);
         setTotal(data.remaining + data.result.length);
         if (data.cursor) {
           setNextCursor(data.cursor);
         }
       });
-  }, [client, address, currentCursor]);
+  }, [client, address]);
 
+  // FIXME: reimplement fetchMore
   const fetchMore = useCallback(() => {
     setCurrentCursor(nextCursor);
     setNextCursor(undefined);

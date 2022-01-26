@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 
+import { Network } from '@/state/Network';
 import { ImmutableXClient, Link } from '@imtbl/imx-sdk';
 
-const ENDPOINTS = {
+export const ENDPOINTS = {
   mainnet: {
     LINK: 'https://link.x.immutable.com',
     PUBLIC_API: 'https://api.x.immutable.com/v1',
@@ -13,11 +14,9 @@ const ENDPOINTS = {
   },
 };
 
-export type Environment = 'mainnet' | 'ropsten';
-
-export const getImmutableX = async (environment: Environment) => {
+export const getImmutableX = async (network: Network) => {
   const Endpoint =
-    environment === 'mainnet' ? ENDPOINTS.mainnet : ENDPOINTS.ropsten;
+    network === 'mainnet' ? ENDPOINTS.mainnet : ENDPOINTS.ropsten;
 
   const link = new Link(Endpoint.LINK);
   const client = await ImmutableXClient.build({
@@ -27,12 +26,12 @@ export const getImmutableX = async (environment: Environment) => {
   return { link, client };
 };
 
-export const useImmutableX = (environment: Environment) => {
+export const useImmutableX = (network: Network) => {
   const [link, setLink] = useState<Link | null>(null);
   const [client, setClient] = useState<ImmutableXClient | null>(null);
 
   useEffect(() => {
-    getImmutableX(environment)
+    getImmutableX(network)
       .then(({ link, client }) => {
         setLink(link);
         setClient(client);
@@ -40,7 +39,7 @@ export const useImmutableX = (environment: Environment) => {
       .catch((error) => {
         console.error(error);
       });
-  }, [environment]);
+  }, [network]);
 
   return { link, client };
 };

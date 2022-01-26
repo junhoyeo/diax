@@ -2,13 +2,15 @@ import { ethers } from 'ethers';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
 import { Tab } from '@/components/Tab';
-import { Environment, useImmutableX } from '@/hooks/useImmutableX';
+import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssets } from '@/hooks/useImmutableXAssets';
 import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { NetworkAtom } from '@/state/Network';
 import { shortenAddress } from '@/utils/shortenAddress';
 import { ETHTokenType } from '@imtbl/imx-sdk';
 
@@ -20,11 +22,9 @@ const provider = new ethers.providers.JsonRpcProvider(
 
 const LandingPage = () => {
   const router = useRouter();
-  const [environment, setEnvironment] = useLocalStorage<Environment>(
-    '@environment',
-    'mainnet',
-  );
-  const { client, link } = useImmutableX(environment);
+  const [network, setNetwork] = useRecoilState(NetworkAtom);
+
+  const { client, link } = useImmutableX(network);
 
   const [address, setAddress] = useLocalStorage<string>('@wallet_address', '');
   const [ensDomain, setEnsDomain] = useLocalStorage<string>('@ens', '');
@@ -96,11 +96,9 @@ const LandingPage = () => {
           <PrimaryButton onClick={onClickSetupIMX}>Setup IMX</PrimaryButton>
         ) : null}
         <Tab
-          selected={environment}
+          selected={network}
           onChange={(value) => {
-            setEnvironment(value);
-            setAddress('');
-            setBalances([]);
+            setNetwork(value);
           }}
           tabs={[
             { type: 'mainnet', title: 'Mainnet' },
