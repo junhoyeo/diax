@@ -10,7 +10,7 @@ import { NetworkAtom } from '@/state/Network';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';
 
-const DetailPage = () => {
+const Layer2DetailPage = () => {
   const router = useRouter();
   const network = useRecoilValue(NetworkAtom);
   const { client, link } = useImmutableX(network);
@@ -46,20 +46,6 @@ const DetailPage = () => {
   if (!asset) {
     return null;
   }
-
-  // useEffect(() => {
-  //   if (!link) {
-  //     return;
-  //   }
-  //   link
-  //     .deposit({
-  //       type: ERC721TokenType.ERC721,
-  //       tokenAddress: '0xa15b310f70f0eae2fab0bd1c50c88eace94bbbd6',
-  //       tokenId: '1',
-  //     })
-  //     .then(console.log)
-  //     .catch(console.error);
-  // }, [link]);
 
   return (
     <Wrapper>
@@ -107,17 +93,34 @@ const DetailPage = () => {
               </a>
             </li>
           </LinkList>
-          <button
-            style={{ background: 'white', color: 'black', padding: 20 }}
-            onClick={() =>
-              prepareWithdrawal({
-                tokenId: asset.token_id,
-                tokenAddress: asset.token_address,
-              }).catch(console.log)
-            }
-          >
-            Withdraw
-          </button>
+
+          {asset.status === 'imx' && (
+            <button
+              style={{ background: 'white', color: 'black', padding: 20 }}
+              onClick={() =>
+                prepareWithdrawal({
+                  tokenId: asset.token_id,
+                  tokenAddress: asset.token_address,
+                }).catch(console.log)
+              }
+            >
+              Withdraw
+            </button>
+          )}
+          {asset.status === 'withdrawable' && (
+            <button
+              style={{ background: 'white', color: 'black', padding: 20 }}
+              onClick={() =>
+                completeWithdrawal({
+                  tokenId: asset.token_id,
+                  tokenAddress: asset.token_address,
+                }).catch(console.log)
+              }
+            >
+              Complete Withdraw
+            </button>
+          )}
+
           <p>{asset.description}</p>
           {attributes.map((attribute) => (
             <div key={attribute.name}>
@@ -138,7 +141,7 @@ const DetailPage = () => {
   );
 };
 
-export default DetailPage;
+export default Layer2DetailPage;
 
 const Wrapper = styled.div`
   padding: 80px 20px;

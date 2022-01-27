@@ -76,9 +76,12 @@ const LandingPage = () => {
   const { assets: openSeaAssets } = useOpenSeaAssets({ address });
   const assets = useMemo(() => {
     if (network === 'mainnet') {
-      return [...immutableXAssets, ...openSeaAssets];
+      return [
+        ...immutableXAssets.map((v) => ({ ...v, type: 'l2' })),
+        ...openSeaAssets.map((v) => ({ ...v, type: 'l1' })),
+      ];
     }
-    return immutableXAssets;
+    return immutableXAssets.map((v) => ({ ...v, type: 'l2' }));
   }, [network, immutableXAssets, openSeaAssets]);
 
   return (
@@ -121,7 +124,9 @@ const LandingPage = () => {
         <List>
           {assets.map((asset) => (
             <ListItem key={`${asset.token_address}-${asset.token_id}`}>
-              <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
+              <Link
+                href={`/detail/${asset.type}/${asset.token_address}/${asset.token_id}`}
+              >
                 <a>
                   <ListItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
                 </a>
