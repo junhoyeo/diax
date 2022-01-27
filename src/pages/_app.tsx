@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Russo+One&display=block"
           rel="stylesheet"
         />
       </Head>

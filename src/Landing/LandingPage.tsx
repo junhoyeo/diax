@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { ETHTokenType } from '@imtbl/imx-sdk';
 
-import { HeaderSection } from './HeaderSection';
+import { HeaderSection } from './components/HeaderSection';
 
 const AVATAR_URL =
   'https://lh3.googleusercontent.com/1fQX9jABcIpiU7zjkuIv0H6XmkRZiIlFIQK_7YEzsx8L5Xw2yb0dWXUrtXfQvDuhPG1YRt2BywbstBugUUL7cZgYHg-Xb0XAcVai=w600';
@@ -33,16 +33,16 @@ const LandingPage = () => {
 
   return (
     <Wrapper>
-      <Container>
-        <HeaderSection />
-
-        <AvatarContainer>
-          <Avatar src={AVATAR_URL} />
-        </AvatarContainer>
-        <AlphaDAOImage src="https://avatars.githubusercontent.com/u/92674615?s=200&v=4" />
-        <AvatarName>@Juno</AvatarName>
-        <AvatarTitle onClick={onClickDonate}>Donate 0.1Ξ</AvatarTitle>
-      </Container>
+      <HeaderSection />
+      <ParallaxContainer>
+        <Container>
+          <AvatarContainer>
+            <Avatar src={AVATAR_URL} />
+          </AvatarContainer>
+          <AvatarName>@Juno</AvatarName>
+          <AvatarTitle onClick={onClickDonate}>Donate 0.1Ξ</AvatarTitle>
+        </Container>
+      </ParallaxContainer>
     </Wrapper>
   );
 };
@@ -50,15 +50,34 @@ const LandingPage = () => {
 export default LandingPage;
 
 const Wrapper = styled.div`
-  padding: 80px 20px;
+  width: 100%;
   display: flex;
   justify-content: center;
+
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
 `;
 
-const Container = styled.div`
-  max-width: 1240px;
+const ParallaxContainer = styled.div`
   width: 100%;
-  color: white;
+  margin-top: 16px;
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(18px);
+  border-top: 2px solid #24d1e9;
+  box-shadow: 0 -2px 16px rgba(36, 210, 233, 0.45);
+
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+`;
+const Container = styled.div`
+  max-width: 1280px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
 `;
 
 const AvatarContainer = styled.div`
@@ -79,10 +98,6 @@ const Avatar = styled.img`
     0 100%,
     0% 10%
   );
-`;
-const AlphaDAOImage = styled.img`
-  width: 32px;
-  height: 32px;
 `;
 const AvatarName = styled.span`
   font-weight: bold;
