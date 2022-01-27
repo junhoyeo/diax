@@ -42,6 +42,7 @@ export const GlobalStyle = createGlobalStyle`
 
   &::selection {
     color: rgba(255, 255, 255, 0.65);
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.65);
     background-color: #373FFF;
   }
 `;
