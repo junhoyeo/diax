@@ -121,8 +121,14 @@ const AvatarTitle = styled.span`
 const FeatureList = styled.ul`
   margin: 0;
   padding: 0;
+  padding: 0 20px;
   list-style-type: none;
 
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: 940px) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 `;
