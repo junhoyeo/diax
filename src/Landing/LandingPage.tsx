@@ -1,16 +1,17 @@
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 import { useImmutableX } from '@/hooks/useImmutableX';
-import { ERC20TokenType, ERC721TokenType, ETHTokenType } from '@imtbl/imx-sdk';
+import { ETHTokenType } from '@imtbl/imx-sdk';
+
+import { HeaderSection } from './HeaderSection';
 
 const AVATAR_URL =
   'https://lh3.googleusercontent.com/1fQX9jABcIpiU7zjkuIv0H6XmkRZiIlFIQK_7YEzsx8L5Xw2yb0dWXUrtXfQvDuhPG1YRt2BywbstBugUUL7cZgYHg-Xb0XAcVai=w600';
 
 const LandingPage = () => {
   const router = useRouter();
-  const [address, setAddress] = useState<string>('');
 
   const { client, link } = useImmutableX('ropsten');
   const onClickDonate = useCallback(async () => {
@@ -33,27 +34,8 @@ const LandingPage = () => {
   return (
     <Wrapper>
       <Container>
-        <HeaderSection>
-          <Logo src="/logos/diax.svg" alt="DiaX" />
-          <Title>DiaX, Wallet for Immutable X</Title>
-          <FieldInputContainer>
-            <Field>
-              Search with <strong>Ethereum Address</strong> or{' '}
-              <strong>ENS</strong>
-            </Field>
-            <Input
-              placeholder="0x0000...0000"
-              onChange={(e) => {
-                setAddress(e.target.value);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  router.push(`/${address}`);
-                }
-              }}
-            />
-          </FieldInputContainer>
-        </HeaderSection>
+        <HeaderSection />
+
         <AvatarContainer>
           <Avatar src={AVATAR_URL} />
         </AvatarContainer>
@@ -76,55 +58,6 @@ const Wrapper = styled.div`
 const Container = styled.div`
   max-width: 1240px;
   width: 100%;
-  color: white;
-`;
-
-const HeaderSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const Logo = styled.img`
-  width: 436px;
-
-  @media screen and (max-width: 640px) {
-    width: 312px;
-  }
-`;
-
-const Title = styled.h1`
-  margin: 0;
-  margin-top: 16px;
-
-  font-weight: normal;
-  font-size: 1.25rem;
-`;
-
-const FieldInputContainer = styled.div`
-  margin-top: 32px;
-  width: 100%;
-  max-width: 540px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const Field = styled.span`
-  width: 100%;
-
-  font-size: 1.25rem;
-  color: #24d1e9;
-`;
-const Input = styled.input`
-  margin-top: 8px;
-  padding: 12px 24px;
-  width: 100%;
-
-  border: 3px solid #24d1e9;
-  border-radius: 10px;
-  background-color: transparent;
-  font-size: 1.25rem;
-  line-height: 120%;
   color: white;
 `;
 

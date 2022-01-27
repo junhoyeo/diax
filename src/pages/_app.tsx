@@ -18,6 +18,10 @@ function MyApp({ Component, pageProps }) {
           href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600&display=swap"
           rel="stylesheet"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap"
+          rel="stylesheet"
+        />
       </Head>
       <GlobalStyle />
       <RecoilRoot>
