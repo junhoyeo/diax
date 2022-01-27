@@ -101,6 +101,18 @@ export default function DetailPage() {
             </li>
           </LinkList>
 
+          {asset.status === 'eth' && (
+            <SecondaryButton
+              onClick={() =>
+                deposit({
+                  tokenId: asset.token_id,
+                  tokenAddress: asset.token_address,
+                }).catch(console.log)
+              }
+            >
+              Deposit
+            </SecondaryButton>
+          )}
           {asset.status === 'imx' && (
             <PrimaryButton
               onClick={() =>
