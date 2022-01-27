@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -9,11 +10,9 @@ import { Tab } from '@/components/Tab';
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssets } from '@/hooks/useImmutableXAssets';
 import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useOpenSeaAssets } from '@/hooks/useOpenSeaAssets';
 import { NetworkAtom } from '@/state/Network';
 import { shortenAddress } from '@/utils/shortenAddress';
-import { ETHTokenType } from '@imtbl/imx-sdk';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';
 
@@ -21,56 +20,53 @@ const provider = new ethers.providers.JsonRpcProvider(
   'https://eth-mainnet.alchemyapi.io/v2/S1LUkRnEm4yXq8ofnYa9yrLgr1PoglsV',
 );
 
-const LandingPage = () => {
-  const router = useRouter();
+type Props = {
+  address: string;
+};
+type Params = {
+  address: string;
+  domain: string;
+};
+export const getServerSideProps: GetServerSideProps<Props, Params> = async ({
+  params,
+}) => {
+  let address = params.address as string;
+  let domain: string | null = null;
+
+  if (!address) {
+    return { notFound: true };
+  }
+
+  const isDomain = address.endsWith('.eth');
+  if (isDomain) {
+    domain = address;
+    try {
+      address = await provider.resolveName(domain);
+    } catch (error) {
+      return { notFound: true };
+    }
+  }
+
+  const isEthereumAddress = address.startsWith('0x') && address.length === 42;
+  if (!isEthereumAddress) {
+    return { notFound: true };
+  } else {
+    domain = await provider.lookupAddress(address);
+  }
+
+  return { props: { address, domain } };
+};
+
+export default function AddressPage({ address, domain }: Params) {
   const [network, setNetwork] = useRecoilState(NetworkAtom);
 
-  const { client, link } = useImmutableX(network);
+  const { client } = useImmutableX(network);
 
-  const [address, setAddress] = useLocalStorage<string>('@wallet_address', '');
-  const [ensDomain, setEnsDomain] = useLocalStorage<string>('@ens', '');
-  useEffect(() => {
-    if (!router.isReady) {
-      return;
-    }
-    let address = '';
-    if (router.query.address) {
-      address = router.query.address as string;
-      setAddress(address);
-    }
-    if (address) {
-      provider.lookupAddress(address).then(setEnsDomain);
-    }
-  }, [router, setAddress, setEnsDomain]);
-
-  const [starkPublicKey, setStarkPublicKey] = useLocalStorage<string>(
-    '@stark_public_key',
-    '',
-  );
   const {
     balances,
     setBalances,
     refetch: refetchBalances,
   } = useImmutableXBalances({ client, address });
-
-  const onClickSetupIMX = useCallback(async () => {
-    if (!link) {
-      return;
-    }
-    try {
-      const { address, starkPublicKey } = await link.setup({});
-      setAddress(address);
-      setStarkPublicKey(starkPublicKey);
-      refetchBalances();
-    } catch (error) {
-      console.error(error);
-    }
-  }, [link, setAddress, setStarkPublicKey, refetchBalances]);
-
-  const onClickDisconnectIMX = useCallback(async () => {
-    setAddress('');
-    setStarkPublicKey('');
-  }, [setAddress, setStarkPublicKey]);
 
   const { assets: immutableXAssets } = useImmutableXAssets({ client, address });
   const { assets: openSeaAssets } = useOpenSeaAssets({ address });
@@ -87,9 +83,6 @@ const LandingPage = () => {
   return (
     <Wrapper>
       <Container>
-        {!address ? (
-          <PrimaryButton onClick={onClickSetupIMX}>Setup IMX</PrimaryButton>
-        ) : null}
         <Tab
           selected={network}
           onChange={(value) => {
@@ -100,9 +93,9 @@ const LandingPage = () => {
             { type: 'ropsten', title: 'Ropsten (Testnet)' },
           ]}
         />
-        <EnsDomain>{ensDomain}</EnsDomain>
+        <EnsDomain>{domain}</EnsDomain>
         <EthereumAddress>{shortenAddress(address)}</EthereumAddress>
-        <span>STARK PUBLIC KEY: {starkPublicKey}</span>
+
         {balances.map((balance, index) => (
           <ul key={index}>
             <li>
@@ -137,9 +130,7 @@ const LandingPage = () => {
       </Container>
     </Wrapper>
   );
-};
-
-export default LandingPage;
+}
 
 const Wrapper = styled.div`
   padding: 80px 20px;
