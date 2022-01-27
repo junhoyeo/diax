@@ -86,9 +86,24 @@ export default function DetailPage() {
                 </a>
               </li>
             )}
+            {network === 'mainnet' && asset.status === 'eth' && (
+              <li>
+                <a
+                  href={`https://opensea.io/assets/${asset.token_address}/${asset.token_id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: 'unset' }}
+                >
+                  <LinkLogoBadge>
+                    <LinkLogo src="/logos/opensea.svg" alt="OpenSea" />
+                    <span>OpenSea</span>
+                  </LinkLogoBadge>
+                </a>
+              </li>
+            )}
             <li>
               <a
-                href={`${MARKETPLACE_ENDPOINT}/assets?collection=${asset.token_address}&sort[order_by]=buy_quantity&sort[direction]=asc`}
+                href={`${MARKETPLACE_ENDPOINT}/assets/${asset.token_address}/${asset.token_id}`}
                 target="_blank"
                 rel="noreferrer"
                 style={{ color: 'unset' }}
