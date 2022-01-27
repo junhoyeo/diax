@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <GlobalStyle />
       <RecoilRoot>
-        <NextNProgress />
+        <NextNProgress color="#24d2e9" />
         <Component {...pageProps} />
       </RecoilRoot>
     </React.Fragment>
