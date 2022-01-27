@@ -1,8 +1,8 @@
+import axios from 'axios';
 import { ethers } from 'ethers';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useRecoilState } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
@@ -16,10 +16,6 @@ import { shortenAddress } from '@/utils/shortenAddress';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';
 
-const provider = new ethers.providers.JsonRpcProvider(
-  'https://eth-mainnet.alchemyapi.io/v2/S1LUkRnEm4yXq8ofnYa9yrLgr1PoglsV',
-);
-
 type Props = {
   address: string;
 };
@@ -31,30 +27,12 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async ({
   params,
 }) => {
   let address = params.address as string;
-  let domain: string | null = null;
-
-  if (!address) {
+  try {
+    const { data } = await axios.get(`https://diax.app/api/ens/${address}`);
+    return { props: { ...data } };
+  } catch (e) {
     return { notFound: true };
   }
-
-  const isDomain = address.endsWith('.eth');
-  if (isDomain) {
-    domain = address;
-    try {
-      address = await provider.resolveName(domain);
-    } catch (error) {
-      return { notFound: true };
-    }
-  }
-
-  const isEthereumAddress = address.startsWith('0x') && address.length === 42;
-  if (!isEthereumAddress) {
-    return { notFound: true };
-  } else {
-    domain = await provider.lookupAddress(address);
-  }
-
-  return { props: { address, domain } };
 };
 
 export default function AddressPage({ address, domain }: Params) {
