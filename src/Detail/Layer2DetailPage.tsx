@@ -95,8 +95,7 @@ const Layer2DetailPage = () => {
           </LinkList>
 
           {asset.status === 'imx' && (
-            <button
-              style={{ background: 'white', color: 'black', padding: 20 }}
+            <PrimaryButton
               onClick={() =>
                 prepareWithdrawal({
                   tokenId: asset.token_id,
@@ -105,11 +104,10 @@ const Layer2DetailPage = () => {
               }
             >
               Withdraw
-            </button>
+            </PrimaryButton>
           )}
           {asset.status === 'withdrawable' && (
-            <button
-              style={{ background: 'white', color: 'black', padding: 20 }}
+            <PrimaryButton
               onClick={() =>
                 completeWithdrawal({
                   tokenId: asset.token_id,
@@ -118,7 +116,7 @@ const Layer2DetailPage = () => {
               }
             >
               Complete Withdraw
-            </button>
+            </PrimaryButton>
           )}
 
           <p>{asset.description}</p>
@@ -255,4 +253,29 @@ const LinkLogoBadge = styled.div`
 const LinkLogo = styled.img`
   width: 24px;
   height: 24px;
+`;
+
+const PrimaryButton = styled.button`
+  margin-top: 16px;
+  width: fit-content;
+  padding: 12px 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #17aabf;
+  border-radius: 10px;
+  background-color: #1dc1d8;
+
+  font-weight: bold;
+  font-size: 1.65rem;
+  color: white;
+  line-height: 120%;
+`;
+const SecondaryButton = styled(PrimaryButton)`
+  border: 3px solid #24d1e9;
+  border-radius: 10px;
+  background-color: transparent;
+  color: #24d1e9;
 `;
