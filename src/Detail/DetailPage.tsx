@@ -22,7 +22,7 @@ export default function DetailPage() {
       address: '0x4a003f0a2c52e37138eb646aB4E669C4A84C1001',
     });
 
-  const { asset, mints, transfers } = useImmutableXAssetDetail({
+  const { asset, mints, transfers, refetchAsset } = useImmutableXAssetDetail({
     network,
     client,
     tokenAddress: router.query.token_address as string,
@@ -107,7 +107,11 @@ export default function DetailPage() {
                 deposit({
                   tokenId: asset.token_id,
                   tokenAddress: asset.token_address,
-                }).catch(console.log)
+                })
+                  .then(() => {
+                    refetchAsset();
+                  })
+                  .catch(console.log)
               }
             >
               Deposit
@@ -119,7 +123,11 @@ export default function DetailPage() {
                 prepareWithdrawal({
                   tokenId: asset.token_id,
                   tokenAddress: asset.token_address,
-                }).catch(console.log)
+                })
+                  .then(() => {
+                    refetchAsset();
+                  })
+                  .catch(console.log)
               }
             >
               Withdraw
@@ -131,7 +139,11 @@ export default function DetailPage() {
                 completeWithdrawal({
                   tokenId: asset.token_id,
                   tokenAddress: asset.token_address,
-                }).catch(console.log)
+                })
+                  .then(() => {
+                    refetchAsset();
+                  })
+                  .catch(console.log)
               }
             >
               Complete Withdraw

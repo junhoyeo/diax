@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Network } from '@/state/Network';
 import { ImmutableMethodResults, ImmutableXClient } from '@imtbl/imx-sdk';
@@ -37,20 +37,33 @@ export const useImmutableXAssetDetail = ({
     return ENDPOINTS[network].PUBLIC_API;
   }, [network]);
 
-  useEffect(() => {
-    if (!client || !tokenId || !tokenAddress || isFetchedRef.current) {
-      return;
-    }
+  const getAsset = useCallback(() => {
     axios
       .get(`${API_ENDPOINT}/assets/${tokenAddress}/${tokenId}`)
       .then(({ data }) => {
         isFetchedRef.current = true;
         setAsset(data);
       });
-  }, [client, tokenId, tokenAddress, API_ENDPOINT]);
+  }, [API_ENDPOINT, tokenId, tokenAddress]);
+
+  const refetchAsset = useCallback(() => {
+    axios
+      .get(`${API_ENDPOINT}/assets/${tokenAddress}/${tokenId}`)
+      .then(({ data }) => {
+        isFetchedRef.current = true;
+        setAsset(data);
+      });
+  }, [API_ENDPOINT, tokenId, tokenAddress]);
 
   useEffect(() => {
-    if (!client || !tokenId || !tokenAddress || isFetchedMintsRef.current) {
+    if (!tokenId || !tokenAddress || isFetchedRef.current) {
+      return;
+    }
+    getAsset();
+  }, [client, tokenId, tokenAddress, getAsset]);
+
+  useEffect(() => {
+    if (!tokenId || !tokenAddress || isFetchedMintsRef.current) {
       return;
     }
     axios
@@ -61,10 +74,10 @@ export const useImmutableXAssetDetail = ({
         isFetchedMintsRef.current = true;
         setMints(data.result);
       });
-  }, [client, tokenId, tokenAddress, API_ENDPOINT]);
+  }, [tokenId, tokenAddress, API_ENDPOINT]);
 
   useEffect(() => {
-    if (!client || !tokenId || !tokenAddress || isFetchedTransfersRef.current) {
+    if (!tokenId || !tokenAddress || isFetchedTransfersRef.current) {
       return;
     }
     axios
@@ -75,7 +88,7 @@ export const useImmutableXAssetDetail = ({
         isFetchedTransfersRef.current = true;
         setTransfers(data.result);
       });
-  }, [client, tokenId, tokenAddress, API_ENDPOINT]);
+  }, [tokenId, tokenAddress, API_ENDPOINT]);
 
-  return { asset, mints, transfers };
+  return { asset, mints, transfers, refetchAsset };
 };
