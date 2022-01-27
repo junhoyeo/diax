@@ -39,7 +39,7 @@ const LandingPage = () => {
         <Container>
           <FeatureList>
             <FeatureItem title="Transfer" src="/images/feature-transfer.png">
-              Send ETH/ERC20/ERC721 Tokens to Anyone
+              Send ETH/ERC20/ERC721 Tokens anywhere in L2
             </FeatureItem>
             <FeatureItem title="Bridge" src="/images/feature-bridge.png">
               {`Interface to deposit & withdraw L1/L2 assets`}
