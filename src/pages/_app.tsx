@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import NextNProgress from 'nextjs-progressbar';
 import React from 'react';
 import { RecoilRoot } from 'recoil';
 
@@ -25,6 +26,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <GlobalStyle />
       <RecoilRoot>
+        <NextNProgress />
         <Component {...pageProps} />
       </RecoilRoot>
     </React.Fragment>
