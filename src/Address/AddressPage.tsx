@@ -10,7 +10,6 @@ import { Tab } from '@/components/Tab';
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssets } from '@/hooks/useImmutableXAssets';
 import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
-import { useOpenSeaAssets } from '@/hooks/useOpenSeaAssets';
 import { NetworkAtom } from '@/state/Network';
 import { shortenAddress } from '@/utils/shortenAddress';
 
@@ -47,16 +46,11 @@ export default function AddressPage({ address, domain }: Params) {
   } = useImmutableXBalances({ client, address });
 
   const { assets: immutableXAssets } = useImmutableXAssets({ client, address });
-  const { assets: openSeaAssets } = useOpenSeaAssets({ address });
-  const assets = useMemo(() => {
-    if (network === 'mainnet') {
-      return [
-        ...immutableXAssets.map((v) => ({ ...v, type: 'l2' })),
-        ...openSeaAssets.map((v) => ({ ...v, type: 'l1' })),
-      ];
-    }
-    return immutableXAssets.map((v) => ({ ...v, type: 'l2' }));
-  }, [network, immutableXAssets, openSeaAssets]);
+
+  const assets = useMemo(
+    () => immutableXAssets.map((v) => ({ ...v, type: 'l2' })),
+    [immutableXAssets],
+  );
 
   return (
     <Wrapper>
@@ -95,9 +89,7 @@ export default function AddressPage({ address, domain }: Params) {
         <List>
           {assets.map((asset) => (
             <ListItem key={`${asset.token_address}-${asset.token_id}`}>
-              <Link
-                href={`/detail/${asset.type}/${asset.token_address}/${asset.token_id}`}
-              >
+              <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
                 <a>
                   <ListItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
                 </a>

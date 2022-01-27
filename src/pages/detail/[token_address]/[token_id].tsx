@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-const DynamicPage = dynamic(() => import('@/Detail/Layer2DetailPage'), {
+const DynamicPage = dynamic(() => import('@/Detail/DetailPage'), {
   ssr: false,
 });
 

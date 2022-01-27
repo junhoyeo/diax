@@ -4,14 +4,13 @@ import { useRecoilValue } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
 import { useImmutableX } from '@/hooks/useImmutableX';
+import { useImmutableXAssetDetail } from '@/hooks/useImmutableXAssetDetail';
 import { useImmutableXBridging } from '@/hooks/useImmutableXBridging';
-import { useOpenSeaAssetDetail } from '@/hooks/useOpenSeaAssetDetail';
 import { NetworkAtom } from '@/state/Network';
-import { ERC721TokenType } from '@imtbl/imx-sdk';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';
 
-const Layer1DetailPage = () => {
+export default function DetailPage() {
   const router = useRouter();
   const network = useRecoilValue(NetworkAtom);
   const { client, link } = useImmutableX(network);
@@ -23,14 +22,35 @@ const Layer1DetailPage = () => {
       address: '0x4a003f0a2c52e37138eb646aB4E669C4A84C1001',
     });
 
-  const { asset } = useOpenSeaAssetDetail({
-    tokenId: router.query.token_id as string,
+  const { asset, mints, transfers } = useImmutableXAssetDetail({
+    network,
+    client,
     tokenAddress: router.query.token_address as string,
+    tokenId: router.query.token_id as string,
   });
+
+  const attributes = useMemo(() => {
+    if (!asset) {
+      return;
+    }
+    let values: { name: string; value: string }[] = [];
+    Object.entries(asset.metadata).forEach(([key, value]) => {
+      if (['name', 'image_url', 'description', 'attributes'].includes(key)) {
+        return;
+      }
+      values.push({ name: key, value: JSON.stringify(value) });
+    });
+    return values;
+  }, [asset]);
 
   if (!asset) {
     return null;
   }
+
+  const MARKETPLACE_ENDPOINT =
+    network === 'mainnet'
+      ? 'https://market.x.immutable.com'
+      : 'https://market.ropsten.x.immutable.com';
 
   return (
     <Wrapper>
@@ -49,24 +69,26 @@ const Layer1DetailPage = () => {
             <CollectionName>{asset.collection.name}</CollectionName>
           </CollectionRow>
           <AssetName>{asset.name ?? 'NAME_IS_EMPTY'}</AssetName>
-          {/* <h1>{asset.status}</h1> */}
+          <h1>{asset.status}</h1>
           <LinkList>
+            {network === 'mainnet' && (
+              <li>
+                <a
+                  href={`https://immutascan.io/address/${asset.token_address}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: 'unset' }}
+                >
+                  <LinkLogoBadge>
+                    <LinkLogo src="/logos/immutascan.png" alt="ImmutaScan" />
+                    <span>ImmutaScan</span>
+                  </LinkLogoBadge>
+                </a>
+              </li>
+            )}
             <li>
               <a
-                href={`https://immutascan.io/address/${asset.token_address}`}
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: 'unset' }}
-              >
-                <LinkLogoBadge>
-                  <LinkLogo src="/logos/immutascan.png" alt="ImmutaScan" />
-                  <span>ImmutaScan</span>
-                </LinkLogoBadge>
-              </a>
-            </li>
-            <li>
-              <a
-                href={`https://market.x.immutable.com/assets?collection=${asset.token_address}&sort[order_by]=buy_quantity&sort[direction]=asc`}
+                href={`${MARKETPLACE_ENDPOINT}/assets?collection=${asset.token_address}&sort[order_by]=buy_quantity&sort[direction]=asc`}
                 target="_blank"
                 rel="noreferrer"
                 style={{ color: 'unset' }}
@@ -78,39 +100,51 @@ const Layer1DetailPage = () => {
               </a>
             </li>
           </LinkList>
-          <SecondaryButton
-            onClick={() => {
-              deposit({
-                tokenId: asset.token_id,
-                tokenAddress: asset.token_address.toLowerCase(),
-              })
-                .then(console.log)
-                .catch(console.error);
-            }}
-          >
-            Deposit
-          </SecondaryButton>
+
+          {asset.status === 'imx' && (
+            <PrimaryButton
+              onClick={() =>
+                prepareWithdrawal({
+                  tokenId: asset.token_id,
+                  tokenAddress: asset.token_address,
+                }).catch(console.log)
+              }
+            >
+              Withdraw
+            </PrimaryButton>
+          )}
+          {asset.status === 'withdrawable' && (
+            <PrimaryButton
+              onClick={() =>
+                completeWithdrawal({
+                  tokenId: asset.token_id,
+                  tokenAddress: asset.token_address,
+                }).catch(console.log)
+              }
+            >
+              Complete Withdraw
+            </PrimaryButton>
+          )}
+
           <p>{asset.description}</p>
-          {/* {attributes.map((attribute) => (
+          {attributes.map((attribute) => (
             <div key={attribute.name}>
               <span>{attribute.name}</span> - <span>{attribute.value}</span>
             </div>
-          ))} */}
-          {/* <h2>Mints</h2>
+          ))}
+          <h2>Mints</h2>
           <pre>
             <code>{JSON.stringify(mints, null, 2)}</code>
           </pre>
           <h2>Transfers</h2>
           <pre>
             <code>{JSON.stringify(transfers, null, 2)}</code>
-          </pre> */}
+          </pre>
         </AssetDetailContainer>
       </Container>
     </Wrapper>
   );
-};
-
-export default Layer1DetailPage;
+}
 
 const Wrapper = styled.div`
   padding: 80px 20px;
