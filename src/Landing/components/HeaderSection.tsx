@@ -13,7 +13,13 @@ export const HeaderSection = () => {
     <React.Fragment>
       <BackgroundImageWrapper>
         <BackgroundImageContainer>
-          <BackgroundImage src={backgroundImage} priority placeholder="blur" />
+          <BackgroundImage
+            src={backgroundImage}
+            priority
+            placeholder="blur"
+            layout="fill"
+            objectFit="cover"
+          />
         </BackgroundImageContainer>
       </BackgroundImageWrapper>
       <Section id="header">

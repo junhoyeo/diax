@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { ETHTokenType } from '@imtbl/imx-sdk';
 
+import { FeatureItem } from './components/FeatureItem';
 import { HeaderSection } from './components/HeaderSection';
 
 const AVATAR_URL =
@@ -36,6 +37,17 @@ const LandingPage = () => {
       <HeaderSection />
       <ParallaxContainer>
         <Container>
+          <FeatureList>
+            <FeatureItem title="Transfer" src="/images/feature-transfer.png">
+              Send ETH/ERC20/ERC721 Tokens to Anyone
+            </FeatureItem>
+            <FeatureItem title="Bridge" src="/images/feature-bridge.png">
+              {`Interface to deposit & withdraw L1/L2 assets`}
+            </FeatureItem>
+            <FeatureItem title="Inventory" src="/images/feature-inventory.png">
+              Mainnet/Ropsten Inventory with Asset History
+            </FeatureItem>
+          </FeatureList>
           <AvatarContainer>
             <Avatar src={AVATAR_URL} />
           </AvatarContainer>
@@ -63,7 +75,7 @@ const Wrapper = styled.div`
 const ParallaxContainer = styled.div`
   width: 100%;
   margin-top: 16px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(18px);
   border-top: 2px solid #24d1e9;
   box-shadow: 0 -2px 16px rgba(36, 210, 233, 0.45);
@@ -104,4 +116,13 @@ const AvatarName = styled.span`
 `;
 const AvatarTitle = styled.span`
   cursor: pointer;
+`;
+
+const FeatureList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  display: flex;
+  justify-content: space-between;
 `;
