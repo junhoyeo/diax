@@ -86,17 +86,18 @@ export default function AddressPage({ address, domain }: Params) {
             </li>
           </ul>
         ))}
-        <List>
+
+        <Grid>
           {assets.map((asset) => (
-            <ListItem key={`${asset.token_address}-${asset.token_id}`}>
+            <GridItem key={`${asset.token_address}-${asset.token_id}`}>
               <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
                 <a>
                   <ListItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
                 </a>
               </Link>
-            </ListItem>
+            </GridItem>
           ))}
-        </List>
+        </Grid>
       </Container>
     </Wrapper>
   );
@@ -178,17 +179,19 @@ const SecondaryButton = styled(PrimaryButton)`
   color: #24d1e9;
 `;
 
-const List = styled.ul`
+const Grid = styled.ul`
   width: 100%;
   margin: 0;
   padding: 0;
   list-style-type: none;
+
   display: grid;
-  grid-template-columns: repeat(5, 256px);
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill, 256px);
   grid-column-gap: 16px;
   grid-row-gap: 16px;
 `;
-const ListItem = styled.li`
+const GridItem = styled.li`
   width: 100%;
 
   & > a {
