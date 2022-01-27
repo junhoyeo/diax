@@ -65,8 +65,8 @@ export default function AddressPage({ address, domain }: Params) {
             { type: 'ropsten', title: 'Ropsten (Testnet)' },
           ]}
         />
-        <EnsDomain>{domain}</EnsDomain>
-        <EthereumAddress>{shortenAddress(address)}</EthereumAddress>
+        <PrimaryName>{domain ?? shortenAddress(address)}</PrimaryName>
+        {!!domain && <SecondaryName>{shortenAddress(address)}</SecondaryName>}
 
         {balances.map((balance, index) => (
           <ul key={index}>
@@ -126,7 +126,7 @@ const backgroundWarpKeyframes = keyframes`
     background-position: 200% 0;
   }
 `;
-const EnsDomain = styled.h1`
+const PrimaryName = styled.h1`
   margin: 0;
   font-size: 3.1rem;
   width: fit-content;
@@ -151,7 +151,7 @@ const EnsDomain = styled.h1`
   background-size: 200%;
   animation: ${backgroundWarpKeyframes} 4s ease infinite;
 `;
-const EthereumAddress = styled.h2`
+const SecondaryName = styled.h2`
   margin: 0;
 `;
 
