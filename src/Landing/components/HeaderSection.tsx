@@ -39,8 +39,10 @@ export const HeaderSection = () => {
           </Information>
           <FieldInputContainer>
             <Field>
-              Search with <strong>Ethereum Address</strong> or{' '}
-              <strong>ENS</strong>
+              Search with <strong>Ethereum Address</strong>{' '}
+              <span>
+                or <strong>ENS</strong>
+              </span>
             </Field>
             <Input
               placeholder="0x0000...0000"
@@ -72,6 +74,11 @@ const Section = styled.section`
 
   position: relative;
   z-index: 0;
+
+  @media screen and (max-width: 768px) {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
 `;
 
 const BackgroundImageWrapper = styled.div`
@@ -142,6 +149,18 @@ const Title = styled.h1`
   line-height: 100%;
   font-family: 'Russo One', sans-serif;
   color: white;
+
+  @media screen and (max-width: 768px) {
+    font-size: 3.65rem;
+  }
+
+  @media screen and (max-width: 440px) {
+    font-size: 3.2rem;
+  }
+
+  @media screen and (max-width: 400px) {
+    font-size: 2.98rem;
+  }
 `;
 const Description = styled.p`
   font-size: 1.45rem;
@@ -166,6 +185,10 @@ const Field = styled.span`
 
   font-size: 1.25rem;
   color: #24d1e9;
+
+  & > span {
+    display: inline-block;
+  }
 `;
 const Input = styled.input`
   margin-top: 8px;
