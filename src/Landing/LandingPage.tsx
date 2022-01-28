@@ -1,35 +1,11 @@
-import { useRouter } from 'next/router';
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-
-import { useImmutableX } from '@/hooks/useImmutableX';
-import { ETHTokenType } from '@imtbl/imx-sdk';
 
 import { FeatureItem } from './components/FeatureItem';
 import { HeaderSection } from './components/HeaderSection';
 import { SponsorSection } from './components/SponsorSection';
 
 const LandingPage = () => {
-  const router = useRouter();
-
-  const { client, link } = useImmutableX('ropsten');
-  const onClickDonate = useCallback(async () => {
-    try {
-      await link.setup({});
-
-      const result = await link.transfer([
-        {
-          type: ETHTokenType.ETH,
-          amount: '0.1',
-          toAddress: '0x4a003f0a2c52e37138eb646aB4E669C4A84C1001',
-        },
-      ]);
-      console.log({ result, hey: 'thanks' });
-    } catch (err) {
-      console.log(err);
-    }
-  }, [link]);
-
   return (
     <Wrapper>
       <HeaderSection />

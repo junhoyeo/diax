@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 
+import { useImmutableX } from '@/hooks/useImmutableX';
+import { ETHTokenType } from '@imtbl/imx-sdk';
+
 export const SponsorSection = () => {
+  const { link } = useImmutableX('ropsten');
+  const onClickDonate = useCallback(async () => {
+    try {
+      const result = await link.transfer([
+        {
+          type: ETHTokenType.ETH,
+          amount: '0.1',
+          toAddress: '0x4a003f0a2c52e37138eb646aB4E669C4A84C1001',
+        },
+      ]);
+      console.log({ result, hey: 'thanks' });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [link]);
+
   return (
     <Section>
       <AvatarBorders>
@@ -14,7 +33,7 @@ export const SponsorSection = () => {
         <AvatarDescription>Software Enginner</AvatarDescription>
 
         <DonateButtonContainer>
-          <DonateButton>
+          <DonateButton onClick={onClickDonate}>
             <SnakeBorder />
             <SnakeBorder />
             <SnakeBorder />
