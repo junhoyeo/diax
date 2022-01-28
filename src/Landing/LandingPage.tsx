@@ -41,6 +41,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 
   position: relative;
+  overflow: hidden;
 `;
 
 const ParallaxContainer = styled.div`

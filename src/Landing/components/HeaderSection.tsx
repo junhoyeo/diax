@@ -56,6 +56,10 @@ export const HeaderSection = () => {
               }}
             />
           </FieldInputContainer>
+
+          <LogoContainer>
+            <Logo src="/images/immutable-x.png" />
+          </LogoContainer>
         </Container>
       </Section>
     </React.Fragment>
@@ -113,9 +117,12 @@ const BackgroundImage = styled(Image)``;
 const Container = styled.div`
   max-width: 1280px;
   width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
+
+  position: relative;
 `;
 const Information = styled.div`
   display: flex;
@@ -202,4 +209,29 @@ const Input = styled.input`
   line-height: 120%;
   color: white;
   background-color: rgba(17, 19, 28, 0.4);
+`;
+
+const LogoContainer = styled.div`
+  position: absolute;
+  top: 64px;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  max-height: 640px;
+
+  @media screen and (max-width: 960px) {
+    top: unset;
+    left: 0;
+    bottom: -120px;
+  }
+`;
+const Logo = styled.img`
+  margin: -120px;
+  width: 600px;
+  height: 600px;
 `;
