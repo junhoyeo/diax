@@ -142,26 +142,25 @@ const DonateButtonContainer = styled.div`
 
   position: relative;
   overflow: hidden;
+  background-color: black;
+  transition: all 0.2s linear;
+
+  &:hover {
+    box-shadow: 0 0 10px rgba(36, 210, 233, 0.35),
+      0 0 24px rgba(36, 210, 233, 0.35), 0 0 48px rgba(36, 210, 233, 0.35);
+    background-color: #042933;
+    transform: scale(1.08);
+  }
 `;
 const DonateButton = styled.button`
   padding: 8px 12px;
   padding-right: 10px;
   display: flex;
   align-items: center;
-  background-color: black;
+  background-color: transparent;
 
   box-shadow: 0 20px 50px rgba(255, 255, 255, 0.05);
   overflow: hidden;
-
-  &:before {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    bottom: 2px;
-    content: '';
-    width: 50%;
-    background: rgba(255, 255, 255, 0.05);
-  }
 `;
 
 const SnakeBorder1 = keyframes`
@@ -197,7 +196,9 @@ const SnakeBorder4 = keyframes`
   }
 `;
 
-const SnakeBorder = styled.span`
+const SnakeBorder = styled.span.attrs({
+  className: 'snake',
+})`
   position: absolute;
 
   &:nth-child(1) {
