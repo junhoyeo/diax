@@ -52,6 +52,15 @@ export default function AddressPage({ address, domain }: Params) {
     [immutableXAssets],
   );
 
+  const collections = useMemo(() => {
+    return immutableXAssets.reduce((acc, curr) => {
+      if (!acc.find((v) => curr.collection.name === v.name)) {
+        return [...acc, curr.collection];
+      }
+      return acc;
+    }, []);
+  }, [immutableXAssets]);
+
   return (
     <Wrapper>
       <Container>
@@ -67,6 +76,8 @@ export default function AddressPage({ address, domain }: Params) {
         />
         <PrimaryName>{domain ?? shortenAddress(address)}</PrimaryName>
         {!!domain && <SecondaryName>{shortenAddress(address)}</SecondaryName>}
+
+        {JSON.stringify(collections)}
 
         {balances.map((balance, index) => (
           <ul key={index}>
