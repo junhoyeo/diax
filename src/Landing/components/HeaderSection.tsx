@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -57,9 +58,11 @@ export const HeaderSection = () => {
             />
           </FieldInputContainer>
 
-          <LogoContainer>
-            <Logo src="/images/immutable-x.png" />
-          </LogoContainer>
+          <AnimatePresence>
+            <LogoContainer>
+              <Logo src="/images/immutable-x.png" />
+            </LogoContainer>
+          </AnimatePresence>
         </Container>
       </Section>
     </React.Fragment>
@@ -211,7 +214,12 @@ const Input = styled.input`
   background-color: rgba(17, 19, 28, 0.4);
 `;
 
-const LogoContainer = styled.div`
+const LogoContainer = styled(motion.div).attrs({
+  initial: { transform: 'rotate(-120deg)' },
+  animate: { transform: 'rotate(0deg)' },
+  exit: { transform: 'rotate(120deg)' },
+  transition: { type: 'easeInOut', delay: 0.2, duration: 1 },
+})`
   position: absolute;
   top: 64px;
   right: 0;
@@ -227,16 +235,17 @@ const LogoContainer = styled.div`
   @media screen and (max-width: 960px) {
     top: unset;
     left: 0;
-    bottom: -96px;
+    bottom: -148px;
   }
 `;
 const Logo = styled.img`
-  margin: -120px;
-  width: 600px;
-  height: 600px;
+  width: 448px;
+  height: 448px;
+
+  filter: drop-shadow(0px -2px 120px rgba(58, 131, 141, 0.4));
 
   @media screen and (max-width: 960px) {
-    width: 480px;
-    height: 480px;
+    width: 420px;
+    height: 420px;
   }
 `;
