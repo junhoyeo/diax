@@ -227,11 +227,16 @@ const LogoContainer = styled.div`
   @media screen and (max-width: 960px) {
     top: unset;
     left: 0;
-    bottom: -120px;
+    bottom: -96px;
   }
 `;
 const Logo = styled.img`
   margin: -120px;
   width: 600px;
   height: 600px;
+
+  @media screen and (max-width: 960px) {
+    width: 480px;
+    height: 480px;
+  }
 `;

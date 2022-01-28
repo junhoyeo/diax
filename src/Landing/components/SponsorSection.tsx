@@ -51,9 +51,15 @@ const Section = styled.section`
   padding: 150px 0 200px;
   display: flex;
   justify-content: center;
+
+  @media screen and (max-width: 540px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const AvatarBorders = styled.div`
+  width: fit-content;
   background-image: radial-gradient(
     101.5% 101.5% at 91.75% 11%,
     #5dc1d9 0%,
@@ -75,6 +81,7 @@ const AvatarBorders = styled.div`
     0 100%,
     0% 10%
   );
+  filter: drop-shadow(0px 12px 24px rgba(46, 160, 181, 0.6));
 `;
 
 const AvatarContainer = styled.div`
@@ -95,8 +102,6 @@ const AvatarContainer = styled.div`
     0 100%,
     0% 10%
   );
-
-  /* filter: drop-shadow(0px 12px 24px rgba(46, 160, 181, 0.6)); */
 `;
 
 const AVATAR_URL =
@@ -117,6 +122,11 @@ const Avatar = styled.img.attrs({
     0 100%,
     0% 10%
   );
+
+  @media screen and (max-width: 540px) {
+    width: 128px;
+    height: 128px;
+  }
 `;
 
 const AvatarInformation = styled.div`
@@ -124,6 +134,11 @@ const AvatarInformation = styled.div`
   flex-direction: column;
 
   margin-left: 24px;
+
+  @media screen and (max-width: 540px) {
+    margin-left: 0;
+    margin-top: 16px;
+  }
 `;
 const AvatarName = styled.span`
   font-size: 1.45rem;
@@ -134,6 +149,10 @@ const AvatarName = styled.span`
 `;
 const AvatarDescription = styled.span`
   color: rgba(255, 255, 255, 0.9);
+
+  @media screen and (max-width: 540px) {
+    text-align: center;
+  }
 `;
 
 const DonateButtonContainer = styled.div`
@@ -150,6 +169,10 @@ const DonateButtonContainer = styled.div`
       0 0 24px rgba(36, 210, 233, 0.35), 0 0 48px rgba(36, 210, 233, 0.35);
     background-color: #042933;
     transform: scale(1.08);
+  }
+
+  @media screen and (max-width: 540px) {
+    margin-top: 24px;
   }
 `;
 const DonateButton = styled.button`
