@@ -7,9 +7,7 @@ import { ETHTokenType } from '@imtbl/imx-sdk';
 
 import { FeatureItem } from './components/FeatureItem';
 import { HeaderSection } from './components/HeaderSection';
-
-const AVATAR_URL =
-  'https://lh3.googleusercontent.com/1fQX9jABcIpiU7zjkuIv0H6XmkRZiIlFIQK_7YEzsx8L5Xw2yb0dWXUrtXfQvDuhPG1YRt2BywbstBugUUL7cZgYHg-Xb0XAcVai=w600';
+import { SponsorSection } from './components/SponsorSection';
 
 const LandingPage = () => {
   const router = useRouter();
@@ -48,11 +46,8 @@ const LandingPage = () => {
               Mainnet/Ropsten Inventory with Asset History
             </FeatureItem>
           </FeatureList>
-          <AvatarContainer>
-            <Avatar src={AVATAR_URL} />
-          </AvatarContainer>
-          <AvatarName>@Juno</AvatarName>
-          <AvatarTitle onClick={onClickDonate}>Donate 0.1Ξ</AvatarTitle>
+
+          <SponsorSection />
         </Container>
       </ParallaxContainer>
     </Wrapper>
@@ -82,7 +77,22 @@ const ParallaxContainer = styled.div`
 
   display: flex;
   justify-content: center;
-  z-index: 1;
+  z-index: 0;
+
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
+  }
 `;
 const Container = styled.div`
   max-width: 1280px;
@@ -90,32 +100,6 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
-`;
-
-const AvatarContainer = styled.div`
-  margin-top: 64px;
-  filter: drop-shadow(0px 12px 24px rgba(46, 160, 181, 0.45));
-`;
-const Avatar = styled.img`
-  width: 156px;
-  height: 156px;
-  border-radius: 0;
-  clip-path: polygon(
-    10% 0%,
-    100% 0,
-    100% 0,
-    100% 90%,
-    90% 100%,
-    0 100%,
-    0 100%,
-    0% 10%
-  );
-`;
-const AvatarName = styled.span`
-  font-weight: bold;
-`;
-const AvatarTitle = styled.span`
-  cursor: pointer;
 `;
 
 const FeatureList = styled.ul`
