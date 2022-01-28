@@ -133,7 +133,7 @@ export default function DetailPage() {
             </SecondaryButton>
           )}
           {asset.status === 'imx' && (
-            <PrimaryButton
+            <SecondaryButton
               onClick={() =>
                 prepareWithdrawal({
                   tokenId: asset.token_id,
@@ -146,7 +146,7 @@ export default function DetailPage() {
               }
             >
               Withdraw
-            </PrimaryButton>
+            </SecondaryButton>
           )}
           {asset.status === 'withdrawable' && (
             <PrimaryButton
