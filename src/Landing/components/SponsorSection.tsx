@@ -119,12 +119,14 @@ const AvatarDescription = styled.span`
 
 const DonateButtonContainer = styled.div`
   margin-top: auto;
+  width: fit-content;
 
   position: relative;
   overflow: hidden;
 `;
 const DonateButton = styled.button`
   padding: 8px 12px;
+  padding-right: 10px;
   display: flex;
   align-items: center;
   background-color: black;
