@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { NavigationBar } from '@/components/NavigationBar';
+
 import { FeatureItem } from './components/FeatureItem';
 import { HeaderSection } from './components/HeaderSection';
 import { SponsorSection } from './components/SponsorSection';
@@ -8,6 +10,7 @@ import { SponsorSection } from './components/SponsorSection';
 const LandingPage = () => {
   return (
     <Wrapper>
+      <NavigationBar />
       <HeaderSection />
       <ParallaxContainer>
         <Container>
