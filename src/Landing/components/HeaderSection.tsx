@@ -86,6 +86,11 @@ const Section = styled.section`
     padding-left: 36px;
     padding-right: 36px;
   }
+
+  @media screen and (max-width: 540px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 `;
 
 const BackgroundImageWrapper = styled.div`
@@ -173,6 +178,8 @@ const Title = styled.h1`
   }
 `;
 const Description = styled.p`
+  margin: 0;
+  margin-top: 24px;
   font-size: 1.45rem;
   color: rgba(255, 255, 255, 0.8);
 
@@ -189,6 +196,10 @@ const FieldInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media screen and (max-width: 540px) {
+    margin-top: 24px;
+  }
 `;
 const Field = styled.span`
   width: 100%;
