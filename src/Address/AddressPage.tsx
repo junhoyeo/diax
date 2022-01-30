@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ethers } from 'ethers';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
@@ -12,6 +12,8 @@ import { useImmutableXAssets } from '@/hooks/useImmutableXAssets';
 import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
 import { NetworkAtom } from '@/state/Network';
 import { shortenAddress } from '@/utils/shortenAddress';
+
+import { CollectionItem } from './components/CollectionItem';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';
 
@@ -46,11 +48,20 @@ export default function AddressPage({ address, domain }: Params) {
   } = useImmutableXBalances({ client, address });
 
   const { assets: immutableXAssets } = useImmutableXAssets({ client, address });
+  const [selectedCollection, setSelectedCollection] = useState<string>('');
 
   const assets = useMemo(
     () => immutableXAssets.map((v) => ({ ...v, type: 'l2' })),
     [immutableXAssets],
   );
+  const filteredAssets = useMemo(() => {
+    if (!selectedCollection) {
+      return assets;
+    }
+    return assets.filter(
+      (asset) => asset.collection.name === selectedCollection,
+    );
+  }, [assets, selectedCollection]);
 
   const collections = useMemo(() => {
     return immutableXAssets.reduce((acc, curr) => {
@@ -77,8 +88,6 @@ export default function AddressPage({ address, domain }: Params) {
         <PrimaryName>{domain ?? shortenAddress(address)}</PrimaryName>
         {!!domain && <SecondaryName>{shortenAddress(address)}</SecondaryName>}
 
-        {JSON.stringify(collections)}
-
         {balances.map((balance, index) => (
           <ul key={index}>
             <li>
@@ -98,17 +107,36 @@ export default function AddressPage({ address, domain }: Params) {
           </ul>
         ))}
 
-        <Grid>
-          {assets.map((asset) => (
-            <GridItem key={`${asset.token_address}-${asset.token_id}`}>
-              <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
-                <a>
-                  <ListItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
-                </a>
-              </Link>
-            </GridItem>
-          ))}
-        </Grid>
+        <AssetSection>
+          <CollectionList>
+            {collections.map((collection) => (
+              <CollectionItem
+                key={collection.name}
+                {...collection}
+                selected={selectedCollection === collection.name}
+                onClick={() => {
+                  if (selectedCollection === collection.name) {
+                    setSelectedCollection('');
+                  } else {
+                    setSelectedCollection(collection.name);
+                  }
+                }}
+              />
+            ))}
+          </CollectionList>
+
+          <Grid>
+            {filteredAssets.map((asset) => (
+              <GridItem key={`${asset.token_address}-${asset.token_id}`}>
+                <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
+                  <a>
+                    <GridItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
+                  </a>
+                </Link>
+              </GridItem>
+            ))}
+          </Grid>
+        </AssetSection>
       </Container>
     </Wrapper>
   );
@@ -121,7 +149,6 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  max-width: 1240px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -190,7 +217,14 @@ const SecondaryButton = styled(PrimaryButton)`
   color: #24d1e9;
 `;
 
+const AssetSection = styled.section`
+  display: flex;
+  width: 100%;
+`;
+const CollectionList = styled.ul``;
+
 const Grid = styled.ul`
+  flex: 1;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -219,9 +253,11 @@ const GridItem = styled.li`
     font-size: 0.8rem;
   }
 `;
-const ListItemImage = styled.img`
+const GridItemImage = styled.img`
   width: 256px;
   height: 256px;
   border-radius: 10px;
   background-color: #191e2b;
+  user-select: none;
+  -webkit-user-drag: none;
 `;
