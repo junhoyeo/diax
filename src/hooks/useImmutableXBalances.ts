@@ -32,12 +32,12 @@ export const useImmutableXBalances = ({
       })
       .then(({ result }) => {
         const balances = result.map((data) => ({
-          symbol: data.symbol as 'ETH' | 'IMX',
+          symbol: data.symbol.toUpperCase() as 'ETH' | 'IMX',
           balance: data.balance,
           preparingWithdrawal: data.preparing_withdrawal,
           withdrawable: data.withdrawable,
         }));
-        setBalances(balances);
+        setBalances(balances.filter((v) => ['ETH', 'IMX'].includes(v.symbol)));
       })
       .catch((error) => {
         console.log(error);

@@ -88,24 +88,40 @@ export default function AddressPage({ address, domain }: Params) {
         <PrimaryName>{domain ?? shortenAddress(address)}</PrimaryName>
         {!!domain && <SecondaryName>{shortenAddress(address)}</SecondaryName>}
 
-        {balances.map((balance, index) => (
-          <ul key={index}>
-            <li>
-              {balance.symbol.toUpperCase()}:{' '}
-              {balance ? ethers.utils.formatEther(balance.balance) : '-'}
-            </li>
-            <li>
-              Preparing withdrawal:{' '}
-              {balance
-                ? ethers.utils.formatEther(balance.preparingWithdrawal)
-                : '-'}
-            </li>
-            <li>
-              Withdrawal:{' '}
-              {balance ? ethers.utils.formatEther(balance.withdrawable) : '-'}
-            </li>
-          </ul>
-        ))}
+        <BalanceList>
+          {balances.map((balance, index) => (
+            <BalanceListItem key={index}>
+              <BalanceContainer>
+                <BalanceIcon
+                  alt={balance.symbol}
+                  src={
+                    balance.symbol === 'ETH'
+                      ? '/images/ethereum.png'
+                      : '/images/imx.png'
+                  }
+                />
+                <BalanceTokenInformation>
+                  <BalanceName>
+                    {balance.symbol === 'ETH' ? 'Ethereum' : 'IMX Token'}
+                  </BalanceName>
+                  <BalanceAmount>
+                    {balance ? ethers.utils.formatEther(balance.balance) : '-'}{' '}
+                    <BalanceSymbol>{balance.symbol}</BalanceSymbol>
+                  </BalanceAmount>
+                </BalanceTokenInformation>
+              </BalanceContainer>
+              <BalanceMemo>
+                Preparing withdrawal:{' '}
+                {balance
+                  ? ethers.utils.formatEther(balance.preparingWithdrawal)
+                  : '-'}
+                {' / '}
+                Withdrawal:{' '}
+                {balance ? ethers.utils.formatEther(balance.withdrawable) : '-'}
+              </BalanceMemo>
+            </BalanceListItem>
+          ))}
+        </BalanceList>
 
         <AssetSection>
           <CollectionList>
@@ -217,11 +233,66 @@ const SecondaryButton = styled(PrimaryButton)`
   color: #24d1e9;
 `;
 
+const BalanceList = styled.ul`
+  margin: 0;
+  padding: 0;
+  margin: 16px 0;
+  list-style-type: none;
+  width: 100%;
+  max-width: 320px;
+`;
+const BalanceListItem = styled.li`
+  padding: 16px 0;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+`;
+const BalanceContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const BalanceIcon = styled.img`
+  width: 42px;
+  height: 42px;
+`;
+const BalanceTokenInformation = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+`;
+const BalanceName = styled.span`
+  font-weight: bold;
+  font-size: 1.25rem;
+`;
+const BalanceAmount = styled.span`
+  font-size: 1.3rem;
+`;
+const BalanceSymbol = styled.span`
+  color: white;
+  font-size: 1.1rem;
+`;
+const BalanceMemo = styled.div`
+  font-size: 0.8rem;
+  color: #0e5f6c;
+  margin-left: ${42 + 8}px;
+`;
+
 const AssetSection = styled.section`
   display: flex;
   width: 100%;
 `;
-const CollectionList = styled.ul``;
+const CollectionList = styled.ul`
+  margin: 0;
+  margin-left: 32px;
+  margin-right: 8px;
+  padding: 0;
+  width: 250px;
+
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
+`;
 
 const Grid = styled.ul`
   flex: 1;
