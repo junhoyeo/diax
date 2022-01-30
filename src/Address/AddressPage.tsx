@@ -111,12 +111,12 @@ export default function AddressPage({ address, domain }: Params) {
                 </BalanceTokenInformation>
               </BalanceContainer>
               <BalanceMemo>
-                Preparing withdrawal:{' '}
+                <strong>Preparing withdrawal</strong>:{' '}
                 {balance
                   ? ethers.utils.formatEther(balance.preparingWithdrawal)
                   : '-'}
                 {' / '}
-                Withdrawal:{' '}
+                <strong>Withdrawable</strong>:{' '}
                 {balance ? ethers.utils.formatEther(balance.withdrawable) : '-'}
               </BalanceMemo>
             </BalanceListItem>
