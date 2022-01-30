@@ -6,6 +6,7 @@ import React, { useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
+import { SnakeButton } from '@/components/SnakeButton';
 import { Tab } from '@/components/Tab';
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssets } from '@/hooks/useImmutableXAssets';
@@ -88,6 +89,18 @@ export default function AddressPage({ address, domain }: Params) {
         <PrimaryName>{domain ?? shortenAddress(address)}</PrimaryName>
         {!!domain && <SecondaryName>{shortenAddress(address)}</SecondaryName>}
 
+        <span>Current Wallet</span>
+        <MyWalletMenu>
+          <SnakeButton>Deposit</SnakeButton>
+          <SnakeButton>Withdraw</SnakeButton>
+        </MyWalletMenu>
+
+        <Indicator>
+          <IndicatorSquare />
+          <IndicatorSquare />
+          <IndicatorSquare />
+        </Indicator>
+
         <BalanceList>
           {balances.map((balance, index) => (
             <BalanceListItem key={index}>
@@ -111,13 +124,19 @@ export default function AddressPage({ address, domain }: Params) {
                 </BalanceTokenInformation>
               </BalanceContainer>
               <BalanceMemo>
-                <strong>Preparing withdrawal</strong>:{' '}
-                {balance
-                  ? ethers.utils.formatEther(balance.preparingWithdrawal)
-                  : '-'}
-                {' / '}
-                <strong>Withdrawable</strong>:{' '}
-                {balance ? ethers.utils.formatEther(balance.withdrawable) : '-'}
+                <span>
+                  <strong>Preparing withdrawal</strong>:{' '}
+                  {balance
+                    ? ethers.utils.formatEther(balance.preparingWithdrawal)
+                    : '-'}
+                  {' / '}
+                </span>
+                <span>
+                  <strong>Withdrawable</strong>:{' '}
+                  {balance
+                    ? ethers.utils.formatEther(balance.withdrawable)
+                    : '-'}
+                </span>
               </BalanceMemo>
             </BalanceListItem>
           ))}
@@ -233,6 +252,28 @@ const SecondaryButton = styled(PrimaryButton)`
   color: #24d1e9;
 `;
 
+const MyWalletMenu = styled.div`
+  display: flex;
+  margin-top: 16px;
+
+  & > div:not(:last-of-type) {
+    margin-right: 16px;
+  }
+`;
+
+const Indicator = styled.div`
+  margin-top: 24px;
+`;
+const IndicatorSquare = styled.div`
+  width: 8px;
+  height: 8px;
+  background-color: #162e50;
+
+  &:not(:last-of-type) {
+    margin-bottom: 12px;
+  }
+`;
+
 const BalanceList = styled.ul`
   margin: 0;
   padding: 0;
@@ -276,6 +317,10 @@ const BalanceMemo = styled.div`
   font-size: 0.8rem;
   color: #0e5f6c;
   margin-left: ${42 + 8}px;
+
+  & > span {
+    display: inline-block;
+  }
 `;
 
 const AssetSection = styled.section`
