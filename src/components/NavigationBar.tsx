@@ -1,12 +1,30 @@
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useImmutableX } from '@/hooks/useImmutableX';
+import { AccountAtom } from '@/state/Account';
 import { NetworkAtom } from '@/state/Network';
+import { shortenAddress } from '@/utils/shortenAddress';
+
+import { SnakeButton } from './SnakeButton';
 
 export const NavigationBar = () => {
+  const router = useRouter();
   const [network, setNetwork] = useRecoilState(NetworkAtom);
+  const [account, setAccount] = useRecoilState(AccountAtom);
+
+  const { link } = useImmutableX(network);
+  const onClickConnectWallet = useCallback(async () => {
+    try {
+      const _account = await link.setup({});
+      setAccount(_account);
+    } catch (e) {
+      // TODO: handle error
+      console.error(e);
+    }
+  }, [link, setAccount]);
 
   return (
     <Wrapper>
@@ -14,13 +32,25 @@ export const NavigationBar = () => {
         {/* TODO: TBD */}
         <div />
 
-        <SwitchNetwork
-          onClick={() =>
-            setNetwork(network === 'ropsten' ? 'mainnet' : 'ropsten')
-          }
-        >
-          {network}
-        </SwitchNetwork>
+        <Information>
+          <SwitchNetwork
+            onClick={() =>
+              setNetwork(network === 'ropsten' ? 'mainnet' : 'ropsten')
+            }
+          >
+            {network}
+          </SwitchNetwork>
+          {!account && (
+            <SnakeButton onClick={onClickConnectWallet}>
+              Connect Wallet
+            </SnakeButton>
+          )}
+          {!!account && (
+            <SnakeButton onClick={() => router.push(`/${account.address}`)}>
+              {shortenAddress(account.address)}
+            </SnakeButton>
+          )}
+        </Information>
       </Container>
     </Wrapper>
   );
@@ -65,6 +95,26 @@ const Container = styled.div`
 `;
 
 const SwitchNetwork = styled.button`
-  padding: 8px 20px;
+  min-width: 98px;
+  margin-right: 12px;
+  padding: 8px 12px;
+
+  font-size: 1.05rem;
+  font-family: 'Russo One', sans-serif;
+  box-shadow: 0 0 10px rgba(36, 210, 233, 0.1), 0 0 24px rgba(36, 210, 233, 0.1),
+    0 0 48px rgba(36, 210, 233, 0.1);
+  background: linear-gradient(to right, #0c002b, #226f91);
   color: white;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 0 10px rgba(36, 210, 233, 0.2),
+      0 0 24px rgba(36, 210, 233, 0.2), 0 0 48px rgba(36, 210, 233, 0.2);
+    transform: scale(1.08);
+    color: rgba(255, 255, 255, 0.85);
+  }
+`;
+
+const Information = styled.div`
+  display: flex;
 `;

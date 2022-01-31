@@ -6,11 +6,13 @@ import React, { useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
+import { NavigationBar } from '@/components/NavigationBar';
 import { SnakeButton } from '@/components/SnakeButton';
 import { Tab } from '@/components/Tab';
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssets } from '@/hooks/useImmutableXAssets';
 import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
+import { AccountAtom } from '@/state/Account';
 import { NetworkAtom } from '@/state/Network';
 import { shortenAddress } from '@/utils/shortenAddress';
 
@@ -39,6 +41,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async ({
 
 export default function AddressPage({ address, domain }: Params) {
   const [network, setNetwork] = useRecoilState(NetworkAtom);
+  const [account, setAccount] = useRecoilState(AccountAtom);
 
   const { client } = useImmutableX(network);
 
@@ -75,25 +78,25 @@ export default function AddressPage({ address, domain }: Params) {
 
   return (
     <Wrapper>
+      <NavigationBar />
       <Container>
-        <Tab
-          selected={network}
-          onChange={(value) => {
-            setNetwork(value);
-          }}
-          tabs={[
-            { type: 'mainnet', title: 'Mainnet' },
-            { type: 'ropsten', title: 'Ropsten (Testnet)' },
-          ]}
-        />
         <PrimaryName>{domain ?? shortenAddress(address)}</PrimaryName>
         {!!domain && <SecondaryName>{shortenAddress(address)}</SecondaryName>}
 
-        <span>Current Wallet</span>
-        <MyWalletMenu>
-          <SnakeButton>Deposit</SnakeButton>
-          <SnakeButton>Withdraw</SnakeButton>
-        </MyWalletMenu>
+        {account?.address === address && (
+          <MyWalletMenu>
+            <MyWalletInformation>
+              Current Wallet{' '}
+              <DisconnectButton onClick={() => setAccount(null)}>
+                Disconnect
+              </DisconnectButton>
+            </MyWalletInformation>
+            <MyWalletButtonRow>
+              <SnakeButton>Deposit</SnakeButton>
+              <SnakeButton>Withdraw</SnakeButton>
+            </MyWalletButtonRow>
+          </MyWalletMenu>
+        )}
 
         <Indicator>
           <IndicatorSquare />
@@ -253,8 +256,23 @@ const SecondaryButton = styled(PrimaryButton)`
 `;
 
 const MyWalletMenu = styled.div`
+  width: 100%;
   display: flex;
-  margin-top: 16px;
+  flex-direction: column;
+  align-items: center;
+`;
+const MyWalletInformation = styled.span`
+  text-align: center;
+  font-size: 1.05rem;
+`;
+const DisconnectButton = styled.span`
+  color: #24d1e9;
+  text-decoration: underline;
+  margin-left: 11px;
+`;
+const MyWalletButtonRow = styled.div`
+  display: flex;
+  margin-top: 24px;
 
   & > div:not(:last-of-type) {
     margin-right: 16px;

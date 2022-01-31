@@ -32,10 +32,6 @@ const ButtonContainer = styled.div`
     background-color: #042933;
     transform: scale(1.08);
   }
-
-  @media screen and (max-width: 540px) {
-    margin-top: 24px;
-  }
 `;
 const Button = styled.button`
   padding: 8px 12px;
