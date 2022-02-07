@@ -50,11 +50,16 @@ export const useImmutableXBridging = ({
 
   // L1 -> L2
   const deposit = useCallback(
-    (token: TokenInformation) =>
-      link.deposit({
+    (token: TokenInformation) => {
+      console.log('[DEPOSIT]', {
         type: ERC721TokenType.ERC721,
         ...token,
-      }),
+      });
+      return link.deposit({
+        type: ERC721TokenType.ERC721,
+        ...token,
+      });
+    },
     [link],
   );
 

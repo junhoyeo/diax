@@ -120,8 +120,8 @@ export default function DetailPage() {
             <SecondaryButton
               onClick={() =>
                 deposit({
-                  tokenId: asset.token_id,
-                  tokenAddress: asset.token_address,
+                  tokenId: asset.token_id.toString(),
+                  tokenAddress: asset.token_address.toLocaleLowerCase(),
                 })
                   .then(() => {
                     refetchAsset();
