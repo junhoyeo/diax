@@ -2276,10 +2276,10 @@
     moment "^2.29.1"
     winston "^3.3.3"
 
-"@imtbl/imx-sdk@^1.3.26":
-  version "1.3.26"
-  resolved "https://registry.yarnpkg.com/@imtbl/imx-sdk/-/imx-sdk-1.3.26.tgz#06957cda35959b63807ec2631997e417f09398ec"
-  integrity sha512-kKgVuW7rYuyX7OzRVn+gAkS7VYyRFRqioF714pHAC+j3fT90Us0/Y5vvvNj591YMyCyh8wrwemWE6/Nlkakcgg==
+"@imtbl/imx-sdk@^1.3.39":
+  version "1.3.39"
+  resolved "https://registry.yarnpkg.com/@imtbl/imx-sdk/-/imx-sdk-1.3.39.tgz#e0c1c028ef063e1a3e04c6abe078839845adad2b"
+  integrity sha512-zc+SE6mn2ZLIfD1xtzucJENs1ffpLG3Ynjy+Zigy269uzPIgIt2LNtLdpbE338pGbFllHcwKNrolQJY4jyTucw==
   dependencies:
     "@ethersproject/abstract-signer" "^5.0.0"
     "@ethersproject/address" "^5.4.0"
