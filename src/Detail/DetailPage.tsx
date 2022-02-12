@@ -7,6 +7,7 @@ import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssetDetail } from '@/hooks/useImmutableXAssetDetail';
 import { useImmutableXBridging } from '@/hooks/useImmutableXBridging';
 import { NetworkAtom } from '@/state/Network';
+import { ERC721TokenType } from '@imtbl/imx-sdk';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';
 
@@ -34,7 +35,7 @@ export default function DetailPage() {
       return;
     }
     let values: { name: string; value: string }[] = [];
-    Object.entries(asset.metadata).forEach(([key, value]) => {
+    Object.entries(asset.metadata ?? {}).forEach(([key, value]) => {
       if (['name', 'image_url', 'description', 'attributes'].includes(key)) {
         return;
       }
@@ -42,6 +43,19 @@ export default function DetailPage() {
     });
     return values;
   }, [asset]);
+
+  const onClickTransfer = () => {
+    link
+      .transfer([
+        {
+          type: ERC721TokenType.ERC721,
+          tokenId: asset.token_id,
+          tokenAddress: asset.token_address,
+          toAddress: '0x63E3C398609184f948A671A02cB87740D0aff856',
+        },
+      ])
+      .catch(console.error);
+  };
 
   if (!asset) {
     return null;
@@ -164,6 +178,8 @@ export default function DetailPage() {
               Complete Withdraw
             </PrimaryButton>
           )}
+
+          <PrimaryButton onClick={onClickTransfer}>Transfer</PrimaryButton>
 
           <p>{asset.description}</p>
           {attributes.map((attribute) => (
