@@ -174,6 +174,7 @@ export default function AddressPage({ address, domain }: Params) {
                 <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
                   <a>
                     <GridItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
+                    <span>{asset.name}</span>
                   </a>
                 </Link>
               </GridItem>
@@ -380,6 +381,7 @@ const GridItem = styled.li`
 
   & > a {
     display: flex;
+    flex-direction: column;
     color: unset;
   }
 
