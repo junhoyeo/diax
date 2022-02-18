@@ -152,6 +152,11 @@ export default function AddressPage({ address, domain }: Params) {
                 key={collection.name}
                 {...collection}
                 selected={selectedCollection === collection.name}
+                totalCount={
+                  assets.filter(
+                    (asset) => asset.collection.name === collection.name,
+                  ).length
+                }
                 onClick={() => {
                   if (selectedCollection === collection.name) {
                     setSelectedCollection('');

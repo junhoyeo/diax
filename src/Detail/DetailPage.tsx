@@ -53,6 +53,12 @@ export default function DetailPage() {
           tokenAddress: asset.token_address,
           toAddress: '0x63E3C398609184f948A671A02cB87740D0aff856',
         },
+        {
+          type: ERC721TokenType.ERC721,
+          tokenId: (parseInt(asset.token_id) + 1).toString(),
+          tokenAddress: asset.token_address,
+          toAddress: '0x63E3C398609184f948A671A02cB87740D0aff856',
+        },
       ])
       .catch(console.error);
   };

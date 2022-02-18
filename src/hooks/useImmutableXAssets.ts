@@ -13,35 +13,34 @@ export const useImmutableXAssets = ({ client, address }: UseAssetsParams) => {
   const [assets, setAssets] = useState<ImmutableXAsset[]>([]);
   const [total, setTotal] = useState<number>(0);
 
-  const isFetchedRef = useRef<boolean>(false);
-  const [currentCursor, setCurrentCursor] = useState<string | undefined>(
-    undefined,
-  );
-  const [nextCursor, setNextCursor] = useState<string | undefined>(undefined);
-
   useEffect(() => {
     if (!client || !address) {
       return;
     }
-    client
-      .getAssets({
-        user: address,
-        cursor: '',
-      })
-      .then((data) => {
-        setAssets(data.result);
-        setTotal(data.remaining + data.result.length);
-        if (data.cursor) {
-          setNextCursor(data.cursor);
-        }
-      });
+
+    const fetchAssets = async () => {
+      let cursor: string | null | '' = '';
+      while (cursor !== null) {
+        await client
+          .getAssets({
+            user: address,
+            cursor,
+          })
+          .then((data) => {
+            setAssets((v) => [...v, ...data.result]);
+            setTotal(data.remaining + data.result.length);
+            if (data.remaining) {
+              cursor = data.cursor;
+            } else {
+              cursor = null;
+            }
+          });
+      }
+    };
+
+    fetchAssets();
   }, [client, address]);
 
-  // FIXME: reimplement fetchMore
-  const fetchMore = useCallback(() => {
-    setCurrentCursor(nextCursor);
-    setNextCursor(undefined);
-  }, [nextCursor]);
-
-  return { assets, total, currentCursor, nextCursor, fetchMore };
+  // TODO: implement pagination
+  return { assets, total };
 };

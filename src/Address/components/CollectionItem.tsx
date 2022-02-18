@@ -9,6 +9,7 @@ type SelectedProps = {
 type CollectionItemProps = SelectedProps & {
   name: string;
   icon_url: string;
+  totalCount: number;
   onClick: () => void;
 };
 
@@ -16,15 +17,18 @@ export const CollectionItem: React.FC<CollectionItemProps> = ({
   name,
   icon_url,
   selected,
+  totalCount,
   onClick,
 }) => {
   return (
     <Container selected={selected} onClick={onClick}>
       <Image
-        src={icon_url.startsWith('http') ? icon_url : DEFAULT_IMAGE}
+        src={icon_url?.startsWith('http') ? icon_url : DEFAULT_IMAGE}
         alt={name}
       />
-      <Name>{name}</Name>
+      <Name>
+        {name} ({totalCount.toLocaleString()})
+      </Name>
     </Container>
   );
 };
