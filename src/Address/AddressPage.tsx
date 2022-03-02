@@ -8,7 +8,6 @@ import styled, { keyframes } from 'styled-components';
 
 import { NavigationBar } from '@/components/NavigationBar';
 import { SnakeButton } from '@/components/SnakeButton';
-import { Tab } from '@/components/Tab';
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssets } from '@/hooks/useImmutableXAssets';
 import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
@@ -51,7 +50,9 @@ export default function AddressPage({ address, domain }: Params) {
     refetch: refetchBalances,
   } = useImmutableXBalances({ client, address });
 
-  const { assets: immutableXAssets } = useImmutableXAssets({ client, address });
+  const { assets: immutableXAssets, ...assetsPagination } = useImmutableXAssets(
+    { client, address },
+  );
   const [selectedCollection, setSelectedCollection] = useState<string>('');
 
   const assets = useMemo(
@@ -168,18 +169,28 @@ export default function AddressPage({ address, domain }: Params) {
             ))}
           </CollectionList>
 
-          <Grid>
-            {filteredAssets.map((asset) => (
-              <GridItem key={`${asset.token_address}-${asset.token_id}`}>
-                <Link href={`/detail/${asset.token_address}/${asset.token_id}`}>
-                  <a>
-                    <GridItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
-                    <span>{asset.name}</span>
-                  </a>
-                </Link>
-              </GridItem>
-            ))}
-          </Grid>
+          <GridContainer>
+            <Grid>
+              {filteredAssets.map((asset) => (
+                <GridItem key={`${asset.token_address}-${asset.token_id}`}>
+                  <Link
+                    href={`/detail/${asset.token_address}/${asset.token_id}`}
+                  >
+                    <a>
+                      <GridItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
+                      <span>{asset.name}</span>
+                    </a>
+                  </Link>
+                </GridItem>
+              ))}
+            </Grid>
+
+            {assetsPagination.cursor && (
+              <SnakeButton onClick={assetsPagination.next}>
+                Load Next
+              </SnakeButton>
+            )}
+          </GridContainer>
         </AssetSection>
       </Container>
     </Wrapper>
@@ -363,8 +374,15 @@ const CollectionList = styled.ul`
   }
 `;
 
-const Grid = styled.ul`
+const GridContainer = styled.div`
+  width: 100%;
   flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const Grid = styled.ul`
   width: 100%;
   margin: 0;
   padding: 0;

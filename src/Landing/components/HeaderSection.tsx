@@ -74,6 +74,7 @@ const Section = styled.section`
 
   width: 100%;
   height: 100vh;
+  max-height: 1080px;
 
   display: flex;
   flex-direction: column;

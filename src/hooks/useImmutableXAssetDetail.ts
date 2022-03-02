@@ -21,6 +21,7 @@ export const useImmutableXAssetDetail = ({
   tokenId,
   tokenAddress,
 }: UseAssetsParams) => {
+  const [error, setError] = useState<Error | null>(null);
   const [asset, setAsset] = useState<ImmutableXAsset | null>(null);
   const [mints, setMints] = useState<
     ImmutableMethodResults.ImmutableOffchainMintResults[]
@@ -43,6 +44,11 @@ export const useImmutableXAssetDetail = ({
       .then(({ data }) => {
         isFetchedRef.current = true;
         setAsset(data);
+        setError(null);
+      })
+      .catch((_error) => {
+        setError(_error);
+        setAsset(null);
       });
   }, [API_ENDPOINT, tokenId, tokenAddress]);
 
@@ -52,6 +58,11 @@ export const useImmutableXAssetDetail = ({
       .then(({ data }) => {
         isFetchedRef.current = true;
         setAsset(data);
+        setError(null);
+      })
+      .catch((_error) => {
+        setError(_error);
+        setAsset(null);
       });
   }, [API_ENDPOINT, tokenId, tokenAddress]);
 
@@ -90,5 +101,5 @@ export const useImmutableXAssetDetail = ({
       });
   }, [tokenId, tokenAddress, API_ENDPOINT]);
 
-  return { asset, mints, transfers, refetchAsset };
+  return { asset, mints, error, transfers, refetchAsset };
 };

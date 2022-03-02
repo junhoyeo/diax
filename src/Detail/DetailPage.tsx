@@ -3,6 +3,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled, { keyframes } from 'styled-components';
 
+import { NavigationBar } from '@/components/NavigationBar';
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssetDetail } from '@/hooks/useImmutableXAssetDetail';
 import { useImmutableXBridging } from '@/hooks/useImmutableXBridging';
@@ -23,12 +24,13 @@ export default function DetailPage() {
       address: '0x4a003f0a2c52e37138eb646aB4E669C4A84C1001',
     });
 
-  const { asset, mints, transfers, refetchAsset } = useImmutableXAssetDetail({
-    network,
-    client,
-    tokenAddress: router.query.token_address as string,
-    tokenId: router.query.token_id as string,
-  });
+  const { asset, mints, transfers, refetchAsset, error } =
+    useImmutableXAssetDetail({
+      network,
+      client,
+      tokenAddress: router.query.token_address as string,
+      tokenId: router.query.token_id as string,
+    });
 
   const attributes = useMemo(() => {
     if (!asset) {
@@ -64,6 +66,17 @@ export default function DetailPage() {
   };
 
   if (!asset) {
+    if (error) {
+      return (
+        <Wrapper>
+          <NavigationBar onChangeNetwork={() => window.location.reload()} />
+
+          <Container>
+            <h1>Asset not found</h1>
+          </Container>
+        </Wrapper>
+      );
+    }
     return null;
   }
 
@@ -74,6 +87,8 @@ export default function DetailPage() {
 
   return (
     <Wrapper>
+      <NavigationBar onChangeNetwork={() => window.location.reload()} />
+
       <Container>
         <AssetImage src={asset.image_url ?? DEFAULT_IMAGE} />
         <AssetDetailContainer>

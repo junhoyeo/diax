@@ -10,7 +10,13 @@ import { shortenAddress } from '@/utils/shortenAddress';
 
 import { SnakeButton } from './SnakeButton';
 
-export const NavigationBar = () => {
+type NavigationBarProps = {
+  onChangeNetwork?: () => void;
+};
+
+export const NavigationBar: React.FC<NavigationBarProps> = ({
+  onChangeNetwork,
+}) => {
   const router = useRouter();
   const [network, setNetwork] = useRecoilState(NetworkAtom);
   const [account, setAccount] = useRecoilState(AccountAtom);
@@ -34,9 +40,10 @@ export const NavigationBar = () => {
 
         <Information>
           <SwitchNetwork
-            onClick={() =>
-              setNetwork(network === 'ropsten' ? 'mainnet' : 'ropsten')
-            }
+            onClick={() => {
+              setNetwork(network === 'ropsten' ? 'mainnet' : 'ropsten');
+              onChangeNetwork?.();
+            }}
           >
             {network}
           </SwitchNetwork>

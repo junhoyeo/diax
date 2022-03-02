@@ -5,7 +5,6 @@ import { NavigationBar } from '@/components/NavigationBar';
 
 import { FeatureItem } from './components/FeatureItem';
 import { HeaderSection } from './components/HeaderSection';
-import { SponsorSection } from './components/SponsorSection';
 
 const LandingPage = () => {
   return (
@@ -25,8 +24,6 @@ const LandingPage = () => {
               Mainnet/Ropsten Inventory with Asset History
             </FeatureItem>
           </FeatureList>
-
-          <SponsorSection />
         </Container>
       </ParallaxContainer>
     </Wrapper>
