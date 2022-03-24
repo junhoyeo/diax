@@ -1,7 +1,6 @@
+import { ImmutableXClient } from '@imtbl/imx-sdk';
 import { ethers } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
-
-import { ImmutableXClient } from '@imtbl/imx-sdk';
 
 type UseBalanceParams = {
   client: ImmutableXClient | null;

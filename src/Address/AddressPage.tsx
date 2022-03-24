@@ -1,3 +1,5 @@
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 import axios from 'axios';
 import { ethers } from 'ethers';
 import { GetServerSideProps } from 'next';
@@ -13,8 +15,6 @@ import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
 import { AccountAtom } from '@/state/Account';
 import { NetworkAtom } from '@/state/Network';
 import { shortenAddress } from '@/utils/shortenAddress';
-import { keyframes } from '@emotion/react';
-import styled from '@emotion/styled';
 
 import { CollectionItem } from './components/CollectionItem';
 

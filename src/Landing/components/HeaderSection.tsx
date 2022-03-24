@@ -1,9 +1,8 @@
+import styled from '@emotion/styled';
 import { AnimatePresence, HTMLMotionProps, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-
-import styled from '@emotion/styled';
 
 import backgroundImage from '../assets/background.jpg';
 

@@ -1,7 +1,6 @@
-import React from 'react';
-
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import React from 'react';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';
 

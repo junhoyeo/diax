@@ -1,8 +1,8 @@
+import { ImmutableMethodResults, ImmutableXClient } from '@imtbl/imx-sdk';
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Network, NetworkAtom } from '@/state/Network';
-import { ImmutableMethodResults, ImmutableXClient } from '@imtbl/imx-sdk';
 
 type UseAssetsParams = {
   client: ImmutableXClient | null;

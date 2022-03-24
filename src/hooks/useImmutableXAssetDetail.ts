@@ -1,8 +1,8 @@
+import { ImmutableMethodResults, ImmutableXClient } from '@imtbl/imx-sdk';
 import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Network } from '@/state/Network';
-import { ImmutableMethodResults, ImmutableXClient } from '@imtbl/imx-sdk';
 
 import { ENDPOINTS } from './useImmutableX';
 

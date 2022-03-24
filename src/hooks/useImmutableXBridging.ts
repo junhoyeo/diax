@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-
 import {
-  ERC721TokenType, ImmutableMethodResults, ImmutableRollupStatus, ImmutableXClient, Link
+  ERC721TokenType,
+  ImmutableMethodResults,
+  ImmutableRollupStatus,
+  ImmutableXClient,
+  Link,
 } from '@imtbl/imx-sdk';
+import { useCallback, useEffect, useState } from 'react';
 
 type UseBridgingOptions = {
   client: ImmutableXClient;

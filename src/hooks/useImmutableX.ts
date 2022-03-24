@@ -1,7 +1,7 @@
+import { ImmutableXClient, Link } from '@imtbl/imx-sdk';
 import { useEffect, useState } from 'react';
 
 import { Network } from '@/state/Network';
-import { ImmutableXClient, Link } from '@imtbl/imx-sdk';
 
 export const ENDPOINTS = {
   mainnet: {
