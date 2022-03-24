@@ -1,5 +1,7 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 
 type ButtonProps = React.HTMLAttributes<HTMLButtonElement>;
 
@@ -76,9 +78,7 @@ const SnakeBorder4 = keyframes`
   }
 `;
 
-const SnakeBorder = styled.span.attrs({
-  className: 'snake',
-})`
+const _SnakeBorder = styled.span`
   position: absolute;
 
   &:nth-child(1) {
@@ -125,6 +125,10 @@ const SnakeBorder = styled.span.attrs({
     animation-delay: 1s;
   }
 `;
+const SnakeBorder = (props: React.HTMLAttributes<HTMLSpanElement>) => (
+  <_SnakeBorder className="snake" {...props} />
+);
+
 const ButtonTitle = styled.span`
   cursor: pointer;
 

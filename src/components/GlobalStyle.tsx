@@ -1,48 +1,53 @@
-import { createGlobalStyle } from 'styled-components';
-import normalize from 'styled-normalize';
+import normalize from 'emotion-normalize';
 
-export const GlobalStyle = createGlobalStyle`
-  ${normalize}
+import { css, Global } from '@emotion/react';
 
-  * {
-    font-family: 'Rajdhani', sans-serif;
-    box-sizing: border-box;
-    word-break: keep-all;
-  }
+export const GlobalStyle = () => (
+  <Global
+    styles={css`
+      ${normalize}
 
-  html {
-    background-color: #000;
-  }
+      * {
+        font-family: 'Rajdhani', sans-serif;
+        box-sizing: border-box;
+        word-break: keep-all;
+      }
 
-  body {
-    margin: 0;
-  }
+      html {
+        background-color: #000;
+      }
 
-  a {
-    text-decoration: none;
-    cursor: pointer;
-  }
+      body {
+        margin: 0;
+      }
 
-  img {
-    user-select: none;
-    user-drag: none;
-    -webkit-user-drag: none;
-  }
+      a {
+        text-decoration: none;
+        cursor: pointer;
+      }
 
-  input {
-    outline: 0;
-  }
+      img {
+        user-select: none;
+        user-drag: none;
+        -webkit-user-drag: none;
+      }
 
-  button {
-    border: 0;
-    outline: 0;
-    background-color: transparent;
-    cursor: pointer;
-  }
+      input {
+        outline: 0;
+      }
 
-  &::selection {
-    color: rgba(255, 255, 255, 0.65);
-    -webkit-text-fill-color: rgba(255, 255, 255, 0.65);
-    background-color: #373FFF;
-  }
-`;
+      button {
+        border: 0;
+        outline: 0;
+        background-color: transparent;
+        cursor: pointer;
+      }
+
+      &::selection {
+        color: rgba(255, 255, 255, 0.65);
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.65);
+        background-color: #373fff;
+      }
+    `}
+  />
+);

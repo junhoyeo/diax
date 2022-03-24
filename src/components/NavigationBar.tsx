@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
 
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { AccountAtom } from '@/state/Account';
 import { NetworkAtom } from '@/state/Network';
 import { shortenAddress } from '@/utils/shortenAddress';
+import styled from '@emotion/styled';
 
 import { SnakeButton } from './SnakeButton';
 

@@ -1,13 +1,14 @@
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import styled, { keyframes } from 'styled-components';
 
 import { NavigationBar } from '@/components/NavigationBar';
 import { useImmutableX } from '@/hooks/useImmutableX';
 import { useImmutableXAssetDetail } from '@/hooks/useImmutableXAssetDetail';
 import { useImmutableXBridging } from '@/hooks/useImmutableXBridging';
 import { NetworkAtom } from '@/state/Network';
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 import { ERC721TokenType } from '@imtbl/imx-sdk';
 
 const DEFAULT_IMAGE = '/images/empty-asset.png';

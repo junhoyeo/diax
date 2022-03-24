@@ -1,8 +1,9 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, HTMLMotionProps, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import styled from 'styled-components';
+
+import styled from '@emotion/styled';
 
 import backgroundImage from '../assets/background.jpg';
 
@@ -226,12 +227,7 @@ const Input = styled.input`
   background-color: rgba(17, 19, 28, 0.4);
 `;
 
-const LogoContainer = styled(motion.div).attrs({
-  initial: { transform: 'rotate(-120deg)' },
-  animate: { transform: 'rotate(0deg)' },
-  exit: { transform: 'rotate(120deg)' },
-  transition: { type: 'easeInOut', delay: 0.2, duration: 1 },
-})`
+const _LogoContainer = styled(motion.div)`
   position: absolute;
   top: 64px;
   right: 0;
@@ -250,6 +246,16 @@ const LogoContainer = styled(motion.div).attrs({
     bottom: -148px;
   }
 `;
+const LogoContainer = (props: HTMLMotionProps<'div'>) => (
+  <_LogoContainer
+    initial={{ transform: 'rotate(-120deg)' }}
+    animate={{ transform: 'rotate(0deg)' }}
+    exit={{ transform: 'rotate(120deg)' }}
+    transition={{ type: 'easeInOut', delay: 0.2, duration: 1 }}
+    {...props}
+  />
+);
+
 const Logo = styled.img`
   width: 448px;
   height: 448px;

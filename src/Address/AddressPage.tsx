@@ -4,7 +4,6 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import styled, { keyframes } from 'styled-components';
 
 import { NavigationBar } from '@/components/NavigationBar';
 import { SnakeButton } from '@/components/SnakeButton';
@@ -14,6 +13,8 @@ import { useImmutableXBalances } from '@/hooks/useImmutableXBalances';
 import { AccountAtom } from '@/state/Account';
 import { NetworkAtom } from '@/state/Network';
 import { shortenAddress } from '@/utils/shortenAddress';
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 
 import { CollectionItem } from './components/CollectionItem';
 

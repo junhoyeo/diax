@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 
 import { NavigationBar } from '@/components/NavigationBar';
+import styled from '@emotion/styled';
 
 import { FeatureItem } from './components/FeatureItem';
 import { HeaderSection } from './components/HeaderSection';
