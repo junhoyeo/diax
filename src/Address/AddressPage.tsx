@@ -1,5 +1,6 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import { Grid, Stack } from '@mui/material';
 import axios from 'axios';
 import { ethers } from 'ethers';
 import { GetServerSideProps } from 'next';
@@ -171,19 +172,27 @@ export default function AddressPage({ address, domain }: Params) {
           </CollectionList>
 
           <GridContainer>
-            <Grid>
-              {filteredAssets.map((asset) => (
-                <GridItem key={`${asset.token_address}-${asset.token_id}`}>
-                  <Link
-                    href={`/detail/${asset.token_address}/${asset.token_id}`}
-                  >
-                    <a>
-                      <GridItemImage src={asset.image_url ?? DEFAULT_IMAGE} />
-                      <span>{asset.name}</span>
-                    </a>
-                  </Link>
-                </GridItem>
-              ))}
+            <Grid container spacing={{ xs: 2, md: 3 }}>
+              {filteredAssets.map((asset) => {
+                const key = `${asset.collection}-${asset.token_id}`;
+                return (
+                  <Grid item xs={4} key={key}>
+                    <Link
+                      href={`/detail/${asset.token_address}/${asset.token_id}`}
+                      passHref
+                    >
+                      <a>
+                        <Stack>
+                          <GridItemImage
+                            src={asset.image_url ?? DEFAULT_IMAGE}
+                          />
+                          <span>{asset.name}</span>
+                        </Stack>
+                      </a>
+                    </Link>
+                  </Grid>
+                );
+              })}
             </Grid>
 
             {assetsPagination.cursor && (
@@ -382,18 +391,6 @@ const GridContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-const Grid = styled.ul`
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-
-  display: grid;
-  justify-content: center;
-  grid-template-columns: repeat(auto-fill, 256px);
-  grid-column-gap: 16px;
-  grid-row-gap: 16px;
 `;
 const GridItem = styled.li`
   width: 100%;
