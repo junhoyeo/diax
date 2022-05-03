@@ -28,6 +28,8 @@ export const useImmutableXAssets = ({ client, address }: UseAssetsParams) => {
     }
 
     const fetchAssets = async () => {
+      setAssets([]);
+
       const cursor = '';
       await client
         .getAssets({
